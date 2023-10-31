@@ -1,0 +1,132 @@
+---
+title:  "STAT340 Discussion 2: Monte Carlo"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+## XKCD comic
+
+<center><a href="https://xkcd.com/2118/"><img id="comic" src="https://imgs.xkcd.com/comics/normal_distribution.png" title="It's the NORMAL distribution, not the TANGENT distribution."></a></center>
+
+---
+
+Complete these in your discussion groups. One submission per group.
+This week, the problems are a little bit more complex/lengthy, so just **choose *TWO* of the following exercises to complete**.
+
+Please make it clear which two you are attempting (e.g. by deleting the third). Bonus parts are of course optional but encouraged if you have extra time and want to get some more practice.
+
+---
+
+## 1. Estimating Robbin's constant
+
+[Robbin's constant](https://mathworld.wolfram.com/CubeLinePicking.html) is the mean distance between two points in a cube.
+
+a. Randomly generate two points $(x_1,y_1,z_1)$, $(x_2,y_2,z_2)$ **uniformly** in the unit cube a total of $N$ times (at least $1000$, but the more the better!)
+      - hint: you can easily generate all the coordinates you need at once with `runif(6*N)`, then [reshape](https://stackoverflow.com/questions/17752830/r-reshape-a-vector-into-multiple-columns) to an $N\times 6$ matrix (one column for each coordinate component, with each row representing a pair of points), and then perform the arithmetic in the next step by using vectorized operations on the columns (i.e., using each column all at once) to improve computational efficiency.
+      - if you are having difficulties with the above, you can always use the simpler approach of running a for loop N times, where in each step of the loop you generate 2 points (6 coordinates total) and then perform the arithmetic in the next step. For-loops in R tend to be slower than vectorized operations, though!
+      
+```{r}
+N <- 100000
+
+coords <- runif(6*N)
+
+dim(coords) <- c(6, N)
+coords <- t(coords)
+```
+      
+b. Next, compute the standard [Euclidean distance](https://en.wikipedia.org/wiki/Euclidean_distance#Higher_dimensions) between each pair of points and find the mean distance. (Bonus: plot the distribution of these distances!)
+
+```{r}
+x1 <- coords[, 1]
+y1 <- coords[, 2]
+z1 <- coords[, 3]
+x2 <- coords[, 4]
+y2 <- coords[, 5]
+z2 <- coords[, 6]
+
+euclidean_distances <- sqrt((x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2)
+mean_distance <- mean(euclidean_distances)
+
+hist(euclidean_distances, breaks = 30, main = "Distribution of Euclidean Distances",
+     xlab = "Euclidean Distance", ylab = "Frequency")
+
+cat("Mean Euclidean Distance:", mean_distance, "\n")
+```
+
+c. Calculate your [percentage error](https://www.mathsisfun.com/numbers/percentage-error.html) from the [true value](https://stat.ethz.ch/R-manual/R-devel/library/base/html/Constants.html).
+
+```{r}
+perc_error <- (abs(0.6617 - mean_distance) / 0.6617) * 100
+
+print(perc_error)
+```
+
+d. __Bonus:__ can you increase the accuracy of your estimation by using more points (i.e., increasing $N$)? How low can you get the error?
+
+e. __Super bonus:__ Repeat the above for another 2D or 3D object of your choice (how about a triangle or a sphere?)
+
+---
+
+## 2. Flipping coins
+
+Suppose you flip a fair coin $N$ times. How many heads in a row should you expect to see? For example, suppose that I flip a coin 20 times, and I get 5 heads in a row at some point in the sequence. Is this a "surprising" outcome?
+
+   a. Write code to simulate randomly flipping a fair coin ($p=0.5$) a total of $N=10$ times (hint: use either the `rbernoulli` function from the `purrr` package or `rbinom` with `n=10` and `size=1`) and record how many heads (defined as a value of $1$; tails is $0$) in a row you observe. Determining the length of the longest run has been implemented in the function `longest_head_run` below.
+   b. Repeat the above experiment $M$ times. Set $M$ to be at least $1000$, but don't make it extremely large, because we are going to repeat the previous step for other values of the number of flips $N$. What is the mean length of the largest run of heads in $N=10$ flips?
+      - __Note:__ $N$ here is the *size of each experiment*. That is, each experiment consists of $N$ flips. On the other hand, $M$ is *how many experiments* are performed (i.e., the number of times we repeat the experiment). It is common when using Monte Carlo methods to have two types of parameters: one type for the properties of each experiment (e.g., $N$, in this case), and one type that determines how many experiments are done (here, $M$). Increasing $N$ (number of flips in each experiment) will change the experiment by increasing the mean-run-length, whereas increasing $M$ (the number of experiments) will increase the precision of the estimate of the mean run length for a particular number of flips $N$.
+   c. Now, repeat the above (you may use the same $M$) for *at least 3* other values of $N$ (again, feel free to do more if you wish!). Display your results in a table.
+      - __Note:__ this step should be easy if you've written your code with good style. I recommend writing a function that does all the above for any given $N$ and $M$ and, optionally, $p$. For example, something like  `find_mean_run <- function(N, M, p = 0.5) {......}`. Then, for different values of $N$ and $M$ you can simply change the arguments given to the function, e.g. `find_mean_run(10, 1000)` or `find_mean_run(20, 1000)`, etc., then put them in a data frame.
+      - __Note:__ the above function syntax sets `N` and `M` as arguments to the function without default values, but sets `0.5` as the default value of the argument `p`. For a different example, [see this](https://www.javatpoint.com/r-function-default-arguments).
+   d. Validate your results against other people's results (for example, [this post](https://math.stackexchange.com/a/1409539)). Are your results consistent with others?
+   e. __Bonus:__ run a few more values of $N$ and plot the results, showing the mean run length as a function of the number of flips $N$. (bonus²: what happens if you increase $M$?)
+   f. __Super bonus:__ Like [the post referenced above](https://math.stackexchange.com/questions/1409372/what-is-the-expected-length-of-the-largest-run-of-heads-if-we-make-1-000-flips/1409539#1409539), can you fit a smooth curve through the points?
+
+```{r}
+# given output of rbernoulli or rbinom (a vector of 0's and 1's)
+# compute the length of the longest continuous run of 1's
+longest_head_run <- function(trials) {
+  rle_encoded <- rle(trials)
+  head_sequence_indicators <- rle_encoded$values == 1
+  
+  if (!any(head_sequence_indicators)) {
+    return(0L)
+  }
+  
+  lengths_head_sequences <- rle_encoded$lengths[head_sequence_indicators]
+  
+  max(lengths_head_sequences)
+}
+
+# demo of using longest_head_run
+longest_head_run(c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)) # returns 0
+longest_head_run(c(1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0)) # returns 3
+```
+```{r}
+# part a
+rbinom(n=10, size=1, p=0.5)
+```
+
+```{r}
+# part b
+find_mean_run <- function(N, M, p) {
+  results <- FALSE
+  for (i in 1:M) {
+    results[i] <- longest_head_run(rbinom(n=N, size=1, p=p))
+  }
+  
+  print(mean(results))
+}
+
+find_mean_run(10, 1000, 0.5)
+```
+```{r}
+# part c
+find_mean_run(50, 1000, 0.5)
+find_mean_run(80, 1000, 0.5)
+find_mean_run(125, 1000, 0.5)
+```
+# part d
+# it seems like it's consistent with other people's results for the most part. the numbers we're observing are very similar to what we can find in other people's work.
+---
+

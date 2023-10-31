@@ -1,0 +1,318 @@
+---
+author:
+title: "Assignment 5"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, fig.height = 3)
+library(tidyverse)
+library(scales)
+library(lubridate)
+## Note: this code assumes viridis.R is two steps up the file directory tree
+## Comment it out and use the line below if the file is in the same directory
+## Or comment out both lines if you do not have the file
+source("../../scripts/viridis.R")
+```
+
+#### Due Sunday, October 17, 11:59 PM
+
+### Baseball Preface
+
+- The following code chunk will read in each of the data files from the 2021 major league baseball season and do some slight transformations.
+- The code chunk has the argument `include = FALSE` set, so it will not appear in the knitted document.
+- The first several problems use this data and ask you to use various `*_join()` functions to combine data from different files together.
+- There are many columns with statistics that we will not use.
+- Those needed for a particular problem will be described as needed.
+- You do not need to be familiar with the rules of baseball or knowledgeable about the teams to solve the problems
+
+#### File Descriptions
+
+- The basic *player* data sets have one row for each player if the player played for a single team the entire season.
+- If the player played for multiple teams, then there is one row for that player for each team that the player played for and an additional row with the combined statistics over the year.
+    - The combined row has the variable `Tm` for team set to `TOT` for total
+- The value *player* data sets have one row for each player
+- Files with the word *pitching* contain statistics about the part of the game where a player in the role of a pitcher throws the ball toward the plate
+- Files with the word *batting* contain statistics about the part of the game where a player in the role of a batter stands with a bat at the plate and reacts to the pitched ball.
+- Most players in major league baseball are primarily either pitchers or position players, but some players will do both
+    - In the National League, pitchers are in the lineup and so tend to bat much more often than in the American League where the pitcher is replaced by a *designated hitter* in the lineup.
+    - Occasionally, a player who is primarily a position player will pitch
+- The *team* and *standings* data files contain statistics aggregated over all players who played for that team.
+- There are 30 major league baseball teams
+    - There are 15 teams each in the American and National Leagues
+    - Each League is divided into three divisions of five teams each with the names East, Central, and West
+- The variable `Tm` for team is recorded differently in different files    
+    - The *player* data files variable `Tm` is a three-letter abbreviation for the team (or `TOT` for total).
+    - The *team* and *standings* data files variable `Tm` is the full team name
+    - Each full team name begins with a location (most often a city, but occasionally a state)
+- The 2021 regular season ended on Sunday, October 3. Playoffs are currently under way.
+- The only team from Wisconsin, the Milwaukee Brewers, are in the playoffs and begin a best-of-five series versus the Atlanta Braves on Friday, October 8.
+
+```{r, include = FALSE}
+## data from baseball-reference.com
+read_mlb = function(file)
+{
+  ## regex to separate player names from ids
+  sep_string = "[*#]?\\\\"
+  
+  temp = read_csv(file) %>% 
+    separate(Name, into = c("Name", "ID"), sep = sep_string) %>% 
+    select(-Rk)
+  
+  return ( temp )
+}
+
+player_bat_basic = read_mlb("../../data/mlb-2021-player-batting-basic.csv")
+player_bat_value = read_mlb("../../data/mlb-2021-player-batting-value.csv")
+player_pitch_basic = read_mlb("../../data/mlb-2021-player-pitching-basic.csv")
+player_pitch_value = read_mlb("../../data/mlb-2021-player-pitching-value.csv")
+
+team_bat = read_csv("../../data/mlb-2021-team-batting.csv")
+team_pitch = read_csv("../../data/mlb-2021-team-pitching.csv")
+
+standings = read_csv("../../data/mlb-2021-standings.csv") %>% 
+  select(-Rk)
+
+divisions = standings %>% 
+  select(Tm) %>% 
+  mutate(Division = case_when(
+    str_detect(Tm, "Rays|Red Sox|Yankees|Blue Jays|Orioles") ~ "AL East",
+    str_detect(Tm, "White Sox|Indians|Tigers|Royals|Twins") ~ "AL Central",
+    str_detect(Tm, "Astros|Mariners|Athletics|Angels|Rangers") ~ "AL West",
+    str_detect(Tm, "Braves|Phillies|Mets|Marlins|Nationals") ~ "NL East",
+    str_detect(Tm, "Brewers|Cardinals|Cubs|Reds|Pirates") ~ "NL Central",
+    str_detect(Tm, "Giants|Dodgers|Padres|Rockies|Diamondbacks") ~ "NL West"))
+
+abbr = player_bat_basic %>% 
+  select(Tm) %>% 
+  distinct() %>% 
+  filter(Tm != "TOT") %>% 
+  arrange(Tm) %>%
+  mutate(Team = (divisions %>%
+                   select(Tm) %>% 
+                   arrange(Tm) %>% 
+                   ## Seatle > San Francisco but SEA < SFO
+                   mutate(ord = c(1:23,25,24,26:30)) %>% 
+                   arrange(ord) %>% 
+                   pull(Tm))) %>% 
+  rename(Abbr = Tm) %>% 
+  relocate(Team, Abbr)
+```
+
+
+### Problems
+
+### 1
+
+The data sets `player_bat_basic` and `player_bat_value` contain summary statistics from every player that appeared as a batter in a major league baseball game.
+The data sets `player_pitch_basic` and `player_pitch_value` contain summary statistics from every player that appeared as a pitcher in a major league baseball game.
+
+- The *value* data sets should have a single row per player.
+- The *basic* data sets have a single row for most players, but players that appeared for more than one team have a single row for each team for which they appeared with an additional row for their combined batting or pitching statistics designated by the `Tm` variable having the value `TOT`
+- As some players might have the same name, the column `ID` contains a unique identifier for each player
+
+### (a)
+
+Are there any players listed in one of `player_bat_basic` or `player_bat_value` but not the other?
+David Phelps
+Describe any discrepancies you discover.
+
+Write code using the function `anti_join()` to answer the question.
+
+```{r}
+prob1a = anti_join(player_bat_value, player_bat_basic, by = "Name")
+prob1a
+```
+
+### (b)
+
+Repeat for the files `player_pitch_basic` and `player_pitch_value`
+
+```{r}
+prob1b = anti_join(player_pitch_value, player_pitch_basic, by = "Name")
+prob1b
+```
+
+
+### 2
+
+Create a data frame with one row for each team with the following variables:
+
+- `Team` and `Abbr` from `abbr`
+- `League` from the `Lg` variable of a *player* data set as matches `Abbr` matches `Tm`
+- `Division` from the divisions data set
+- `W` and `L` from `standings`
+- `Pct` equal to `W/(W+L)`
+
+Arrange the rows by division, and then from highest to lowest winning percentage within division.
+Print the entire table.
+
+```{r}
+prob2 = left_join(abbr, divisions, by = c("Team" = "Tm")) %>%
+  left_join(player_bat_basic, by = c("Abbr" = "Tm")) %>%
+  left_join(standings, by = c("Team" = "Tm")) %>%
+  left_join(player_bat_basic, Lg, by = c("Lg" = "Tm")) %>%
+  select('Team', 'Abbr', 'Division', 'Lg', 'W', 'L', 'W-L%') %>%
+  rename(Pct = 'W-L%',
+         League = Lg) %>%
+  arrange(Division) %>%
+  group_by(Pct) %>%
+  unique()
+
+prob2
+```
+
+
+### 3
+
+Using the table created in the previous problem,
+select the columns `Abbr`, `Division`, and add a new column named `Place` that takes the values from 1 to 5 from the teams with the highest to lowest winning percentages in each division. (Do not worry about dealing with ties.)
+Then, reshape this table to a wider format with `Place` as one column and the six division names as other column names with the team abbreviations sorted from first to last place within each division column making up the values of the table interior.
+Display the entire table.
+
+```{r}
+prob3 = prob2 %>%
+  group_by(Division) %>%
+  mutate(Place = rank(1-Pct, ties.method = "first")) %>%
+  select(Abbr, Division, Place) %>%
+  arrange(Division, Place) %>%
+  pivot_wider(id_cols = "Place", names_from = Division, values_from = Abbr)
+prob3
+```
+
+### 4
+
+This problem seeks to identify the best batters among players that are primarily pitchers.
+The variable `OPS` stands for on base percentage plus slugging percentage,
+an important baseball statistic for offensive production.
+High values refer to players that get on base often and hit for power.
+
+Create a data frame with all players with at least 50 plate appearances as a batter (`PA >= 50`) and at least 50 innings pitched (`IP >= 50`).
+Use `ID` to join data from different tables.
+Retain the variables `Name`, `Tm`, `PA`, `BA`, `HR`, and `OPS` from the basic batting data set and the variables `ERA`, `SO`, and `IP` from the basic pitching data set.
+Sort the table in descending order of `OPS`.
+Display the first ten rows of the data set and all columns.
+
+```{r}
+prob4 = inner_join(player_bat_basic, player_pitch_basic, by = "ID") %>%
+  filter(PA >= 50, IP >= 50) %>%
+  select(Name.x, Tm.x, PA, BA, HR.x, OPS, ERA, SO.y, IP) %>%
+  arrange(desc(OPS))
+prob4 %>% head(10)
+```
+
+Make a boxplot of the `OPS` variable. Describe any notable features in this plot.
+
+```{r}
+ggplot(data = prob4, aes(x=0, y=OPS)) +
+  geom_boxplot() +
+  xlab("") +
+  ylab("OPS") +
+  scale_x_continuous(breaks = NULL, labels = NULL)
+```
+
+### 5
+
+Read in the `obesity.csv` file.
+Create a subset of the obesity data such that:
+
+- there are no rows from children aged 5--17;
+- retain a zip code only if there is no missing obesity data for all four age groups for each sex
+    - there must be eight non-missing data observations per retained zip code
+    - you may find it useful to create a data summary by zip code with the number of adult rows without missing data first to identify the zip codes to keep
+- filter out zip/sex/age cohorts with missing obesity data
+- calculate the estimated number of adults in the population in each remaining zip code and sex from the age groups where we have obesity data who are obese
+- calculate the estimated proportion of adults in each zip code and sex (for age groups with obesity data) who are obese
+
+The resulting data frame should have the following columns of data.
+
+- `zip` = zip code
+- `sex` = sex (male or female)
+- `adult_n` = estimated # of adults (by zip and sex)
+- `obese_n` = estimated # of obese adults (by zip and sex)
+- `obese_p` = estimated proportion of obese adults (by zip and sex)
+
+```{r}
+obesity = read_csv("../../data/obesity.csv")
+obesity
+prob5 = obesity %>%
+  filter(age != "05-17") %>%
+  filter(!is.na(obese)) %>%
+  group_by(zip, sex) %>%
+  mutate(obese_p = obese/n,
+         obese_n = obese_p * pop,
+         adult_n = sum(pop)) %>%
+  select(zip, sex, adult_n, obese_n, obese_p)
+prob5
+```
+
+### 6
+
+Read in the `education.csv` data frame and reshape it so that there is a single row for each zip code and sex (so, two rows per zip code) using the `pivot_longer()` function.
+After the transformation, you should have columns
+
+- `zip` = zip code
+- `sex` = sex (male or female)
+- `pct_bach` = % adults (aged 25+, of the given sex by zip) with at least a bachelors degree
+
+This action will require both reshaping data and transforming the values and column names.
+
+```{r}
+education = read_csv("../../data/education.csv")
+prob6 = education %>%
+  rename(male = pct_m_bach,
+         female = pct_f_bach) %>%
+  drop_na() %>%
+  pivot_longer(cols = c('male', 'female'), names_to = 'sex', values_to = 'pct_bach')
+
+prob6
+```
+
+Print out all columns of the first ten rows of the education data frame.
+
+```{r}
+prob6 %>% head(10)
+```
+
+### 7
+
+Join the two data sets together by adding the `pct_bach` column to the data set from problem 5.
+
+```{r}
+prob7 = full_join(prob5, prob6, by = c("sex", "zip"))
+prob7
+```
+
+Using the joined data set and the adult population, calculate the statewide percentages of men and women aged 25 and older with a bachelors degree.
+(Ignore the issue that the population totals include adults aged 18-24. This has minimal effect on the calculations as the key factor is different education rates by relative zip code populations, not absolute populations.)
+Display the numerator and denominator for each percentage calculation as part of your solution.
+
+```{r}
+prob7 %>%
+  mutate(statewide = (pct_bach/100) * adult_n) %>%
+  ungroup() %>%
+  drop_na() %>%
+  summarize(total = sum(adult_n), sum_percent = sum(statewide)/total)
+```
+### 8
+
+Make a scatter plot with one point per zip code and sex that displays the *percentage* of a zip code aged 25+ with a bachelor's degree on the x-axis and the *percentage* obese on the y axis.  
+- Use different colors for each sex and add a trend line or curve for each sex.  
+- Create appropriate labels and titles for the plot.  
+
+```{r}
+ggplot(prob7, aes(x = pct_bach, y = obese_p, color = sex)) +
+  geom_point() +
+  geom_smooth(se = FALSE, method = "lm") +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  scale_x_continuous(labels = percent_format(accuracy = 1)) +
+  xlab("Percentage of Bachelors Degrees Aged 25+ In Zip Code") +
+  ylab("Percentage of Obesity") +
+  ggtitle("Education Levels vs. Obesity Rates")
+```
+
+Comment on patterns in the plot of the data.
+What is the evident relationship between obesity and obtaining a college education?
+

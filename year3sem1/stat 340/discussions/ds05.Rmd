@@ -1,0 +1,207 @@
+---
+title:  "STAT340 Discussion 5: Bayes' Rule and Disease Screening"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+names: alan, evan, eve
+---
+
+```{=html}
+<style>
+table{width:50%!important;margin-left:auto!important;margin-right:auto!important;}
+ol[style*="decimal"]>li{margin-top:40px!important;}
+</style>
+```
+<br/>
+
+## XKCD comic
+
+<center><a href="https://xkcd.com/795/"><img src="https://imgs.xkcd.com/comics/conditional_risk.png" id="comic"/></a></center>
+
+------------------------------------------------------------------------
+
+This discussion will dig into some details from the material concerning conditional probability this week's lecture.
+
+As we have been doing, you will work on them in a small group.
+
+------------------------------------------------------------------------
+
+## 1) Warmup
+
+Explain why the XKCD comic above is funny.
+What doesn't the second stick figure understand about conditional probability?
+
+## 2) Estimating a conditional probability
+
+In lecture, we discussed conditional probabilities of the form $\Pr[ A \mid B ]$, where $A$ and $B$ are events, and $\Pr[ B ] > 0$.
+We defined this conditional probability to be 
+$$
+\Pr[ A \mid B ]
+=
+\frac{ \Pr[ A \cap B ] }{ \Pr[ B ] }.
+$$
+
+These probabilities are especially important in the context of screening for diseases, where we are interested in probabilities like 
+$$
+\Pr[ \text{ disease } \mid \text{ positive test }].
+$$
+
+Let's think today about how we might go about estimating a probability like this.
+
+By way of motivation, here is an example of what is called a *contingency table*.
+Suppose that we have sampled a collection of 100 people for a survey, and we ask each participant 1) whether they like cats or dogs better and 2) whether they like soccer or baseball better.
+**Note:** this data is completely fictional.
+It is solely for illustrative purposes.
+
+$$
+\begin{aligned}
+& ~~~~ {\text{ Soccer }} & {\text{ Baseball} } & ~~~~~~ { \bf \text{ Total } } \\
+{ \text{Cats } } & ~~~~~~ \text{ 13 } & \text{ 29 } ~~~ & ~~~~~~ \text{ 42 } \\
+{ \text{Dogs } } & ~~~~~~ \text{ 27 } & \text{ 31 } ~~~ & ~~~~~~ \text{ 58 }\\
+{ \bf \text{Total} } & ~~~~~~ \text{ 40 } & \text{ 60 } ~~~ & ~~~~~~ {\bf \text{ 100 }}
+\end{aligned}
+$$
+
+You've probably seen data in this form before.
+Tables like these are called *contingency tables*.
+You'll get plenty more experience with data like this later in your statistics coursework.
+Today, we can concentrate on the fact that each of our 100 survey participants falls into one of four "boxes":
+
+- Cats and soccer
+- Cats and baseball
+- Dogs and soccer
+- Dogs and baseball
+
+The last row and last column of the table record totals along columns or rows of the table, respectively.
+Since these are totals in the [*margins*](https://www.merriam-webster.com/dictionary/margin) of the table, we call them the *marginal totals* or just *marginals* of the table.
+
+Using this table, it's really easy to estimate a lot of probabilities about our population.
+We'll talk a lot more about the problem of *estimation* in the coming weeks; for now, just remember it's the problem of coming up with a "good guess" as to the value of a number that we don't know.
+
+For example, suppose we want to know the probability that a random person likes cats and soccer, or the probability that a random person likes dogs and baseball.
+Let's recall that our "standard" way of estimating the probability of an event is to count how often our event of interest happened out of the total number of times we "tried".
+So, for example, we would estimate the probability that a random solitaire hand is winnable by dealing $M$ hands of solitaire, counting how many we manage to win (way, $W$), and estimating the probability as $W/M$.
+Think, "number of times the event happened" divided by "the number of times I tried."
+
+So, suppose we want to know the probability that a random person likes cats and soccer.
+There are 100 observations in our survey (i.e., 100 "trials" or "experiments"), and 13 of them answered that they like soccer and cats (top-left of the table).
+So our estimate of $\Pr[ \text{ cats, soccer}]$ is $13/100 = 0.13$.
+Similarly, if we wanted to estimate the probability that a random person likes baseball, we could look in our table and see that 60 of 100 survey respondents said they liked baseball (31 of whom liked dogs and 29 of whom liked cats), so our estimate of $\Pr[ \text{ baseball }]$ is $60/100 = 0.6$.
+
+Okay, but what if we want to estimate a *conditional* probability, i.e., a probability of the form $\Pr[ A \mid B ]$?
+
+Well, by definition, 
+$$
+\Pr[ A \mid B ] = \frac{ \Pr[ A \cap B ] }{ \Pr[ B ] }.
+$$
+
+
+One obvious thing to try would be to estimate each of $\Pr[ A \cap B ]$ and $\Pr[ B]$ according to the "counting" approach above, and then estimate $\Pr[ A \mid B ]$ as the ratio of those two estimates.
+
+**Part a): ratio of estimates**
+
+Estimate $\Pr[ \text{ dogs } \mid \text{ soccer }]$ using this approach.
+
+```{r}
+probability = 0.27 / 0.4
+probability
+```
+
+**Part b): another way**
+
+Okay, but here's another way to think about the probability $\Pr[ \text{ dogs } \mid \text{ soccer }]$.
+A conditional probability is just the probability that one thing happens *given that* some other thing happens.
+So another way to estimate $\Pr[ \text{ dogs } \mid \text{ soccer }]$ is to count up how many people answered "soccer" in our survey data, and then count what fraction of them answered "dogs".
+That is, we estimate $\Pr[ \text{ dogs } \mid \text{ soccer }]$ by computing 
+$$
+\frac{ \text{ Number of people who answered dogs and soccer } }{ \text{Number of people who answered soccer}}.
+$$
+
+Compute this ratio and verify that it matches the estimate you got in part (a) above.
+
+```{r}
+probability = 27/40
+probability
+```
+
+## 3) Mixtures of normals
+
+(Complete this if you have the time)
+
+Consider the following experiment: we flip a fair coin.
+If it lands heads, we draw a random variable from a normal with mean $2$ and variance $1$.
+If the coin lands tails, we draw from a normal with mean $-2$ and variance $1$.
+
+Said another way, let $Z$ be a Bernoulli random variable with success probability $1/2$.
+Define the random variable 
+$$
+X \sim \begin{cases}
+\operatorname{Normal}( 2, 1) & \mbox{ if } Z = 1 \\
+\operatorname{Normal}(-2, 1) & \mbox{ if } Z = 0.
+\end{cases}
+$$
+
+This is an example of what is called a *mixture of normals*, because the random variable $X$ is drawn from one of several different normals depending on the outcome of another random variable.
+
+**Part (a)** Define a function `rmymixture()` that takes a single argument `n` and returns a vector of `n` independent copies of the random variable $X$ above.
+That is, `n` times, you should "flip a coin" (i.e., generate a Bernoulli with success parameter $1/2$), and draw from either a normal with mean 2 and variance 1 or with mean -2 and variance 1, depending on whether the coin lands heads or tails, respectively.
+
+```{r}
+rmymixture <- function(n) {
+  Z <- rbinom(n, 1, 0.5) 
+  X <- rnorm(n, mean = ifelse(Z == 1, 2, -2), sd = 1)  
+  return(X)
+}
+```
+
+**Part (b)** Draw 2000 copies of the variable $X$ and create a histogram of the result.
+What do you see?
+The histogram *should* look (approximately) bimodal, like someone took two different normal distributions and overlaid them.
+
+```{r}
+set.seed(0)  # Set a seed for reproducibility
+n <- 2000
+X_samples <- rmymixture(n)
+
+hist(X_samples, breaks = 30, main = "Histogram of X (2000 Samples)", xlab = "X")
+
+```
+
+**Part (c)** Create a new function `rmymixture2` that takes the same argument `n`, but returns two pieces of data: the values of $X$ and the values of the coinflips $Z$.
+There are several natural ways to do this, but probably easiest is to create a list object with an `x` and a `z` attribute, both of which should be length-`n`vectors, with `z[i]` holding the Bernoulli RV generated for the i-th variable and `x[i]` storing the resulting normal.
+
+```{r}
+rmymixture2 <- function(n) {
+  Z <- rbinom(n, 1, 0.5)  
+  X <- rnorm(n, mean = ifelse(Z == 1, 2, -2), sd = 1) 
+  result <- list(x = X, z = Z)
+  return(result)
+}
+
+```
+
+**Part (d)** Generate 2000 draws from `rmymixture2`, and create a histogram showing *only* the RVs for which $Z$ was equal to $1$ (i.e., the coinflip landed heads).
+What do you see?
+What happens if you make a similar histogram just or the RVs with $Z=0$ (i.e., coinflip landed tails).
+
+```{r}
+set.seed(0)  # Set a seed for reproducibility
+n <- 2000
+data <- rmymixture2(n)
+
+# histogram for Z=1 (heads)
+hist(data$x[data$z == 1], breaks = 30, main = "Histogram of X | Z=1", xlab = "X")
+
+# histogram for Z=0 (tails)
+hist(data$x[data$z == 0], breaks = 30, main = "Histogram of X | Z=0", xlab = "X")
+
+```
+
+------------------------------------------------------------------------
+
+It's pretty clear that the histograms rely on the coin flips. This is similar in concept to a mixture of normals, where the choice of the normal distribution is decided by a random variable.
+
+------------------------------------------------------------------------
+
+These are histograms of the distribution of $X$ *conditional* on the event that $Z=1$ or $Z=0$, respectively!
+So conditional on $Z=1$, $X$ is a normal with mean 2 and variance 1, and conditional on $Z=0$, $X$ is a normal with mean -2 and variance 1.

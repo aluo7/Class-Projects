@@ -1,0 +1,325 @@
+---
+title:  "STAT340: Discussion 8: Linear regression"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+author: alan, eva, evan
+---
+
+## XKCD comic
+
+<center><a href="https://xkcd.com/1725/"><img id="comic" src="https://imgs.xkcd.com/comics/linear_regression.png"></a></center>
+
+---
+
+## Exercise: modeling earthquake frequency and intensity
+
+Today, we will be using real data from the [US Geological Survey (USGS)](https://www.usgs.gov/natural-hazards/earthquake-hazards/earthquakes) to build a model to estimate how the intensity of earthquakes relates to their frequency around the world.
+
+### Background
+
+In seismology, the study of earthquakes, the relationship between the frequency and magnitude of earthquakes can be modeled by the [Gutenberg-Richter (GR) law ](https://en.wikipedia.org/wiki/Gutenberg%E2%80%93Richter_law).
+Let $M$ be the [Richter magnitude](https://en.wikipedia.org/wiki/Richter_magnitude_scale) of a seismic event (roughly speaking, the amount of energy released by an earthquake), and $N$ be the number of events with magnitude **at least $M$** (i.e., greater than or equal to $M$).
+The GR law states that
+$$
+N \approx 10^{a-bM},
+$$
+
+where $a$ and $b$ are constants that depend on the particular choice of place/period.
+In other words, taking the logarithm of both sides,
+$$
+\log_{10}(N) \approx a-bM
+$$ 
+
+Note that this relationship should appear as a straight line if we plot $\log_{10}(N)$ as a function of $M$.
+
+This linear relationship between the log of the number of earthquakes of a given magnitude and the magnitude suggests that we can use linear regression to estimate the values of $a$ and $b$.
+Let's do that!
+
+### Importing the data
+
+Our dataset contains every earthquake (on Earth) of magnitude 4.5 or greater that was detected by USGS from beginning of 2011 to end of 2021.
+A detailed description of the columns can be found [here](https://earthquake.usgs.gov/data/comcat/data-eventterms.php), but the main variables we are interested in for the purposes of this exercise are are `time` (self explanatory) and `mag.binned` (magnitude rounded to nearest half integer).
+
+For convenience, much of the data cleaning and preprocessing has already been done for you.
+You can download the prepared data [here](https://pages.stat.wisc.edu/~kdlevin/teaching/Fall2022/STAT340/discussion/ds08/quakes.csv) or from canvas.
+Be sure to save this file in the same directory as where you are running this source file.
+If you're not sure, run `getwd()` to ask R for the current working directory and save the file there.
+
+```{r}
+quakes <- read.csv( 'quakes.csv' )
+```
+
+First, we need to process the data to obtain the frequencies $N$ and the magnitude $M$ values for each year, where, as a reminder, $N$ is the number of earthquakes with magnitude at least as strong as a given value of $M$ (see wiki page on [GR law](https://en.wikipedia.org/wiki/Gutenberg%E2%80%93Richter_law) for more details).
+That is, we're going to preprocess this data so that for each of the eleven years in the data, for each of a collection of ranges of magnitudes, we'll have a pair of the form $(R,C)$ where $R$ is a range of magnitudes (we'll bin the magnitudes by half integers; see below for details) and $C$ is a count of how many earthquakes occurred in a year (e.g., 2009) whose magnitudes were within the range $R$.
+
+Since this is a bit tricky, it's been done for you below using tidyverse tools.
+We recommend that you read through this block of code carefully to make sure you have at least a high-level understanding of what it is doing.
+It is good to get practice with these sorts of data processing tricks, even if they aren't the main point of the course.
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+quakes.count <- quakes %>%
+   count(year,mag.binned,name='count') %>%
+   group_by(year) %>%
+   mutate(N=rev(cumsum(rev(count))), year=as.character(year))
+
+# NOTES:
+# count(year,mag.binned) counts how many events with that magnitude occurred each year
+#   (see https://dplyr.tidyverse.org/reference/count.html for more info)
+# 
+# group_by(year) followed by cumsum(...) takes the cumulative sum in each year
+# the rev(...rev(...)) runs this cumsum in reverse (otherwise we get ≤M instead of ≥M)
+```
+
+Before moving onto the next step, inspect the data frame to make sure you completely understand what it represents and check that everything looks right.
+Your first and last rows should look something like `2011, 4.5,  7430, 10636` and `2021, 8.0, 2, 2`.
+
+```{r}
+print(quakes.count,n=Inf)
+```
+
+__Question:__ to check your understanding: what does each row in the data frame `quakes.count` represent?
+Given that we are going to treat each of these rows as an observation in our data, which column is the predictor in our regression described above? Which column is the response variable?
+
+<br>Each row represents the number of earthquakes (N) in a given year that have a magnitude at least as strong as the magnitude (M) binned to the nearest half integer. The predictor in our regression is mag.binned, and the response variable is the count.<br/>
+
+### Visualization
+
+As usual, our first step is to visualize the data.
+Make a *scatter plot* of $\log_{10}(N)$ as a function of $M$.
+Note that this means $M$ is on the horizontal axis (we say "$y$ as a function of $x$, not "$x$ as a function of $y$").
+Then, add a line plot on top showing the trajectory of each year, making sure the years are correctly grouped together and distinguished from each other.
+You might use something like `color` or `linetype`, or even something else; use your best judgment.
+
+__Note:__ you can either use `log10(N)` as the `y` aesthetic, OR directly use `y=N` and just rescale the axis to be logarithmic using `scale_y_log10()`. I recommend this second method since it makes the axis easier to read (see [here](https://stackoverflow.com/a/9223257)  for an example).
+
+It should look something like this (don't forget to add a nice title and axis labels to your plot!):
+
+<center><img src="https://kdlevin-uwstat.github.io/STAT340-Fall2021/discussion/ds06/plot.png" style="width:250px;"></center>
+
+```{r}
+# TODO: uncomment and fill in the code below.
+ggplot(quakes.count, aes(x = mag.binned, y = N, color = as.factor(year))) +
+  geom_point() +
+  geom_line() +
+  scale_y_log10() +
+  labs(title = "Log of Count by Magnitude",
+       x = "Magnitude (M)",
+       y = "Log10 of Count (N)") +
+  theme_minimal()
+```
+
+<br/>
+
+### Estimation
+
+Next, we will fit a simple linear regression to the data to estimate $a$ and $b$. Complete the line of code below to fit the model (don't forget the linear relationship is NOT between $N$ and $M$ but rather between $\log_{10}(N)$ and $M$, so adjust your model formula accordingly!).
+
+```{r}
+#TODO: uncomment and fill in the code below.
+lm_quakes <- lm(log10(N) ~ mag.binned, data = quakes.count)
+```
+
+View a summary of the model to see the coefficient estimates, $p$-values, and other relevant info.
+
+```{r}
+#TODO: uncomment the code below.
+summary(lm_quakes)
+```
+
+From your fit, what are your estimates for the constants $a$ and $b$? Pay **careful attention** to the signs here! (hint: remember the GR law uses the convention $a-bM$ whereas R assumes you are fitting `intercept + slope * M`, so your fitted slope is $-b$).
+
+Try to avoid copy-pasting or manually typing in values.
+The `coef()` function lets you extract coefficients from a model object (e.g. `lm.quakes`), or you can access the `coefficients` attribute of your fitted model directly.
+The result will be a vector, and you can then use `[i]` to access the i-th value of this coefficients vector.
+You may also want to use `unname()` at the end to remove the name from the value.
+If you don't, it may carry through to later calculations and interfere with some downstream code.
+
+```{r}
+# TODO: uncomment and fill in code below
+a <- coef(lm_quakes)[1]
+b <- -coef(lm_quakes)[2]
+
+a + b
+```
+
+__Hint:__ if you did this correctly, `a+b` should evaluate to approximately `9.7`.
+
+<br><br/>
+
+### Checking fit
+
+It's always nice to *visually check your fit* to make sure everything looks right.
+Plot the line of best fit along with the data points in the chunk below.
+
+__Hint:__ this time, we recommend using `log10(N)` as the `y` aesthetic, then using [`geom_abline()`](https://ggplot2.tidyverse.org/reference/geom_abline.html) to plot your regression lines using your estimated slope and intercept values.
+This avoids dealing with distorted axis caused by the other method's `scale_y_log10()` which can be non-intuitive to deal with.
+Note that you can use your variables `a` and `b` here that were defined previously to avoid manually typing in numerical estimates (which is almost always bad!).
+
+```{r}
+# TODO: uncomment and complete the code.
+ggplot(quakes.count, aes(x = mag.binned, y = log10(N))) +
+  geom_point() +
+  geom_abline(intercept = a, slope = -b) +
+  labs(title = "Earthquake Data with LOBF",
+       x = "Magnitude (M)",
+       y = "Log10 of Counts (N)")
+
+```
+
+You can also check [the residuals of your fit](https://rpubs.com/iabrady/residual-analysis).
+This is fairly convenient to do in base R.
+Note that you will see some **heteroscedasticity** due to the fact that higher magnitude earthquakes occur much less frequently than lower magnitude earthquakes (thank goodness!), so we expect there to be more variation in our estimates for those magnitudes.
+This is to be expected, and not a huge problem.
+Aside from these extremes, you should be able to see that normality is mostly satisfied.
+
+```{r}
+plot(lm_quakes,which=1:2)
+```
+
+<br/>
+
+### Confidence intervals
+
+Give $95\%$ confidence intervals for $a$ and $b$ (here is a [help page](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/confint), if you need it).
+
+```{r}
+confint(lm_quakes)
+```
+
+Give a brief interpretation of these intervals.
+
+***
+Given our confidence intervals, we are 95% confident that the true intercept of the model is between 8.526988 and 8.789238. We're also 95% confdient that the true slope related to mag.binned is between -1.064177 and -1.023262. This also tells us that there's an inverse relationship between log10(N) and M.
+***
+
+### Making predictions
+
+Let $N_{\ge 5}$ denote the number of earthquakes of magnitude 5 or greater should we expect to see on average each year. 
+According to your estimated model, what is the approximate value of $N_{\ge 5}$?
+Give a brief explanation of your reasoning below.
+
+```{r}
+# TODO: perform calculations here
+N_ge_5 <- 10 ^ (a - b * 5)
+
+N_ge_5
+```
+
+***
+We expect to see 2751.155 earthquakes of mag 5 or greater each year.
+
+***
+
+According to your model, you would expect to see an earthquake with magnitude between 9.5 and 10 on average _once every how many years_?
+Explain your reasoning below.
+__Hint:__ be careful-- we have computed how many earthquakes happen per year, so to determine how many years there are *between* high-magnitude years we should... Also be careful about the part where we want to count earthquakes with magnitude 9.5 or 10, but not bigger and not smaller!
+
+```{r}
+# TODO: perform calculations here
+interval_years <- 1 / (10 ^ (a - b * 9.5) - 10 ^ (a - b * 10))
+
+interval_years
+```
+
+***
+We expect a high magnitude earthquake from between 9.5 - 10 every 25.85606 years.
+***
+
+From the [GR law](https://en.wikipedia.org/wiki/Gutenberg%E2%80%93Richter_law#Background), we can deduce that the total number of earthquakes of magnitude at least $0$ is given by
+$$
+N_\text{Total}=10^{a}.
+$$
+Using your estimate for $a$, approximately how many earthquakes are there in total every year on Earth?
+
+Note that this number is going to be really big-- that's because this isn't just counting magnitude 4.5, 5, 5.5 etc. earthquakes.
+This figure counts the total number of earthquakes of *any* magnitude bigger than zero $0$.
+That is, it is the result of sending $b \rightarrow 0$ in our GR formula from the beginning of discussion.
+Whether this is truly a sensible thing to do, is another matter.
+For example, presumably there is some magnitude of earthquake that is so small that we shouldn't count it.
+Indeed, what does it mean to detect an earthquake with magnitude zero?
+We would detect those literally everywhere all the time--
+magnitude zero earthquakes happen even in Wisconsin!
+This is yet another example of how any model we build is only ever going to be really reliable or sensible for certain values of our predictor!
+
+Still, let's have a look.
+Use the box below to compute your answer.
+
+```{r}
+# TODO: perform calculations here
+N_total <- 10 ^ a
+
+N_total
+```
+
+Realistically, this estimate is probably only good to a few significant figures.
+Thus, rather than giving a precise point estimate, let's construct a confidence interval.
+
+Using your $95\%$ confidence interval for $a$, give an approximate $95\%$ confidence interval for $N_{\ge 5}$.
+It's worth taking some time to think carefully about this question before rushing in and answering it.
+
+```{r}
+# TODO: perform calculations here
+ci_a <- confint(lm_quakes)[1,]
+N_total_lower <- 10 ^ ci_a[1]
+N_total_upper <- 10 ^ ci_a[2]
+N_total_CI <- c(N_total_lower, N_total_upper)
+
+N_total_CI
+```
+
+
+### Variable transformations
+
+Do you detect any nonlinearity in the residual plot (plotting residuals vs predicted)? Do you observe increasing variation towards one end?
+
+Variable transformations can sometimes fix a problem with linearity or the heteroskedacity. The log transformation is popular, and we used the log transform in this. Power transformations can also sometimes fix this (square roots for example). Adding a constant to a variable would normally not affect linearity or variance but when a logarithm is involved then this actually can have an effect.
+
+Please note: Variable transformations can make the model harder to interpret, but let's not worry about that for now. 
+
+Try various variable transformations to see if you can fix the linearity. Try different variable transformations to see if you can fix the heteroskedacity. Do any transformations fix both problems at the same time? Are the residuals normally distributed still? 
+
+```{r}
+# TODO: perform calculations here
+plot(lm_quakes, which = 1)
+```
+
+
+### Urban Populationa and GDP
+
+The following simulated data represents the Per Capita GDP (predictor variable) and percentage urban population for 130 countries. The data can be found in the `urbanPop_sample.csv` file. 
+
+Open the data and look at the scatter plot. What association do you tend to see in the data? Does it seem to be a linear relationship?
+
+```{r}
+#Code goes here
+urbanPop <- read.csv( 'urbanPop_sample.csv' )
+
+plot(urbanPop$GDP, urbanPop$percUrban, 
+     xlab = "Per Capita GDP", 
+     ylab = "Percentage Urban Population", 
+     main = "Scatter plot of Urban Population vs GDP")
+```
+
+Try to fit a linear model to the data. Look at how poorly the straight line fits the data. Also you should check out the residual plot (`plot(lm_object, which=1))`) to see how poorly a linear model fits the data.
+
+
+Spoiler alert - it's not a linear relationship. However, if you perform a log transformation on GDP you will see the shape of the relationship changes dramatically. You can do this in one of two ways. You can either create a new data column `logGDP` which is simply `log(urbanPop$GDP)` or you can use the log transform inside of your `lm` formula. 
+
+Re-fit the linear model to the log-transformed GDP and look at the scatter plot. 
+
+```{r}
+#code goes here
+urbanPop$logGDP <- log(urbanPop$GDP)
+
+lm_log_object <- lm(percUrban ~ logGDP, data = urbanPop)
+
+plot(urbanPop$logGDP, urbanPop$percUrban,
+     xlab = "Log of GDP",
+     ylab = "Percentage Urban Population",
+     main = "Scatter plot with log transformed GDP vs Percentage Urban Population")
+
+abline(lm_log_object, col = "red")
+```
+

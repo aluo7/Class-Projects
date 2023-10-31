@@ -1,0 +1,264 @@
+
+---
+title:  "STAT340 Discussion 3: Hypothesis Testing"
+documentclass: article
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+group name: 332:6
+name: alan luo
+---
+
+<style>
+table{width:50%!important;margin-left:auto!important;margin-right:auto!important;}
+ol[style*="decimal"]>li{margin-top:40px!important;}
+</style>
+
+<br/>
+
+## XKCD comic
+
+<center><a href="https://xkcd.com/539/"><img id="comic" src="https://imgs.xkcd.com/comics/boyfriend.png" title="... okay, but because you said that, we're breaking up."></a></center>
+
+---
+
+## Exercises
+
+Work in a small group. Complete all exercises, or at least make an honest attempt on all problems. 
+
+---
+
+### 1. Gender gap in chess
+
+Due to myriad complex biological factors (e.g. [higher average height](https://doi.org/10.1002/ajpa.1330530314), [higher skeletal muscle mass](https://doi.org/10.1152/jappl.2000.89.1.81), [larger lung sizes](https://dx.doi.org/10.1016%2Fj.tem.2007.08.003), etc. just to name a few), there continues to be a [_significant gender gap_](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3761733) in performance in most sports at the top competitive level.
+
+A gender gap also exists in [games like chess](https://theconversation.com/whats-behind-the-gender-imbalance-in-top-level-chess-150637) where it is less clear why this difference exists. Does the discrepancy mean that men are actually better at chess than women?
+
+Dr. Wei Ji Ma refuted this idea in a [**recent article**](https://en.chessbase.com/post/what-gender-gap-in-chess), arguing that *participation level largely accounts for the observed differences* in ratings of top chess players. Since women are so underrepresented in chess, there is simply a far lower chance of having female players who are as good as the top male players.
+
+Using official [ELO rating](https://en.wikipedia.org/wiki/Elo_rating_system) data for Indian players obtained from [FIDE](https://en.wikipedia.org/wiki/FIDE) (the international governing body for chess), Dr. Ma performed a *permutation test* that showed participation level _**can indeed largely account for the observed gender gap**_.
+In this exercise, we will reproduce his results.
+In the process, we'll get some practice using the permutation test and thinking about how we go about building a statistical model.
+
+a) Download a (slightly preprocessed) data frame of the current FIDE standard (tournament) format ELO ratings either from canvas or from the [course webpage](https://pages.stat.wisc.edu/~kdlevin/teaching/Fall2022/STAT340/discussion/ds03/chess.csv.gz).
+Import it normally using `read.csv`.
+Note that `.csv.gz` just means this is a [.csv file that was compressed](https://www.rdocumentation.org/packages/R.utils/versions/1.9.6/topics/gzip) to save space.
+_You can ignore this_ since most functions in R will automatically decompress and read these files, so no extra work is needed on your part.
+Finally, check that the file was correctly loaded by inspecting the first few rows with `head()`.
+
+```{r}
+# TODO: uncomment the lines below and complete them
+library(tidyverse)
+ 
+ratings.standard = read_csv("chess.csv.gz")
+head(ratings.standard)
+```
+
+
+b) Dr. Ma points out that junior players (i.e., born in or after 2000) may have unreliable ratings.
+_**Remove these players**_ from the data frame.
+Since we are trying to replicate Dr. Ma's results, let's also _**remove all non-Indian**_ players, to match his analysis.
+  
+Next, _**make a density plot**_ of players' ratings, showing the **male and female players as separate curves** in the same plot.
+Don't forget to include axis labels and a title!
+Do the densities look very different?
+
+```{r}
+# TODO: uncomment the lines below and complete them
+# Note: & can be used to filter 2 criteria (e.g., bday and country)
+# 
+ratings.standard.in = ratings.standard %>% 
+  filter(B_day < 2000 & Country == "India")
+
+ggplot(ratings.standard.in, aes(x=Rating , color=Sex)) + 
+  geom_density() +
+  labs(x = "Player Ratings", y = "Density", title = "Chess Ratings by Gender")
+```
+
+c) _**Make a table**_ showing the number of players, mean rating, and highest rating for each sex.
+**Hint:** this can be easily done in one `dplyr` step; use `group_by` followed by a `summarise` with 3 values).
+  
+__Questions:__ What percent of the non-junior Indian players are women? How many points lower is the rating of the top female Indian player than the top male?
+
+```{r}
+# TODO: uncomment the lines below and complete them
+
+ratings.standard.in %>% 
+  group_by(Sex) %>%
+  summarise(num  = n() ,  # for help, see dplyr.tidyverse.org/reference/n.html
+            mean = mean(Rating) ,
+            max  = max(Rating) )
+```
+
+
+d) Okay, we're done setting up the data.
+Time to answer our statistical question!
+Let's take our null hypothesis to be that there is no actual gender gap in performance, i.e. that _**sex does not influence ratings**_. Said another way, our null hypothesis should be that the ratings of male and female chess players in our data set are drawn from the *same distribution*.
+Assuming this is true, we should be able to **permute** the sex column without (on average) affecting any observables.
+  
+Write a function `permutedMaxSexDiff(df,M)` that that takes a data frame `df` and a number of iterations `M` as its arguments.
+Your function should, for each iteration, permute the players' sexes, recompute the difference in ratings between the top male and top female players, and save the result to be returned.
+  
+For efficiency (important in for loops), we implement this as **shuffling the ratings**, then computing
+$$
+\begin{aligned}
+&-\max(\text{first } n_F \text{ elements of permuted ratings}) + \max(\text{rest of ratings vector}) \\
+&=
+\max(\text{rest of ratings vector}) - \max(\text{first } n_F \text{ elements of permuted ratings}),
+\end{aligned}
+$$
+where $n_F$ is the number of female players in the original data frame.
+Note that this approach is equivalent to permuting the player sexes and then computing the difference in each group.
+After all, in both cases, we're just randomly choosing $n_F$ values as a group and comparing the maxima of both groups.
+
+```{r}
+# TODO: uncomment function below and complete
+
+permutedMaxSexDiff = function(df,M){
+
+  # preallocate a vector of results
+  diffs = rep(NA,M)
+
+  # find number of players to draw in each iteration
+  n.F = sum(df$Sex == "F")
+
+  # start loop
+  for(i in 1:M){
+
+    # permute ratings
+    permuted = sample(df$Rating)
+
+    # find max of first n.F elements of vector
+    max.F = max(permuted[1:n.F])
+
+    # find max of rest of vector
+    max.M = max(permuted[(n.F + 1):length(permuted)])
+
+    # find difference in max ratings and save in results vector
+    diffs[i] = max.M - max.F
+  }
+
+  # return results vector
+  return(diffs)
+}
+```
+
+e) Now, _**run the function**_ with at least $M=1000$ iterations (can you do $10,000$?) and visualize the results by _**making a density plot**_.
+Add a vertical line to denote the gender gap in the actual population of non-junior Indian chess players (top male rating minus the top female rating).
+  
+   Compute a $p$-value for your test (**hint:** if you do enough iterations, this should be roughly between 0.6 and 0.7). Is this result what you expect to observe under the null hypothesis?
+   Are your results consistent with Ma's results?
+
+```{r}
+# TODO: uncomment the following lines and complete them
+set.seed(1)
+
+# run the function
+M <- 1000
+diffs = permutedMaxSexDiff(ratings.standard.in, M)
+gender_gap <- max(ratings.standard.in$Rating[ratings.standard.in$Sex == "M"]) - max(ratings.standard.in$Rating[ratings.standard.in$Sex == "F"])
+
+# use enframe to turn vector into data frame for plotting
+diffs %>% enframe(name=NULL,value="diff") %>%
+  ggplot(aes(x = diff)) + geom_density(adjust=2) + 
+  geom_vline(xintercept = gender_gap, color = "red", linetype = "dashed") +
+  labs(x = "Diff in Ratings", y = "Density", title = "Permutation Test Results")
+
+# compute a p-value using mean(), this works since
+# TRUE is numerically treated as 1 and FALSE as 0, and
+# mean is just sum of elements divided by length.
+# This is equivalent to writing sum(diffs>=...)/M,
+# where M is our number of MC replicates.
+pval = mean(diffs >= gender_gap)
+print(pval)
+```
+> _**TODO: REPLACE THIS TEXT WITH YOUR RESPONSE**_
+
+---
+
+### 2. Linear regression coefficient testing
+
+To demonstrate the incredible versatility of permutation testing, let's consider another, similar problem, this time in the context of linear regression.
+__Note:__ we will return to linear regression later this semester. For now, your background from STAT240 will be plenty.
+__Another note:__ In the future you will see other techniques for this problem beyond permutation tests. Still, permutation tests are extremely versatile and are well suited to hypothesis testing, so we will continue using them for now.
+
+This exercise is written to be simpler than the last one, and should take you far less time.
+
+a) Inspect the built-in example data frame `mtcars` that's loaded with every R session. **Briefly read the help page** by running `?mtcars` if you are unfamiliar with the dataset.
+   
+There are many variables in this data set, but today we will just focus on **`mpg` (the response variable) and `drat` (a predictor variable)**.
+Make sure you know what these two variables refer to in real life (see the help page).
+Create a new data frame called `mtcars.small` with just these two columns and print this new data frame.
+
+```{r}
+### TODO: uncomment the below and complete.
+
+mtcars.small <- mtcars[, c("mpg", "drat")]
+head(mtcars.small)
+```
+
+b) Below, we've performed a simple linear regression, showing the coefficients. **Take note of the coefficient estimate for the slope $\beta_1$**, which represents the strength of the linear relationship between the two variables.
+__Note:__ this measure is NOT the same as _significance_; [see this](https://en.wikipedia.org/wiki/Statistical_significance#Effect_size).
+   
+One way to estimate the _significance_ of $\beta_1$ (and the one that is most commonly taught at the undergraduate level) is to use the linear regression model to derive a [$t$-statistic test](https://www.real-statistics.com/regression/hypothesis-testing-significance-regression-line-slope/) for the coefficients and then compare the estimates to the null hypothesis that $\beta_1=0$, i.e., the hypothesis that there is no linear relationship between the variables.
+This would be a *parametric* test, because it relies on specific assumptions about the distribution of the responses in our linear regression model.
+
+You can see from the output below the slope has an estimate of $7.678$ and a standard error of $1.507$.
+The $t$-statistic is then calculated as $(7.678-0)/1.507=5.096$, with $n-2=30$ degrees of freedom, where $n$ is the number of observations.
+We can then compute the $p$-value using `2*(1-pt(5.096,30))` and confirm **it matches the table**.
+Don't worry too much if you don't fully understand this.
+Do note, however, that the process is very similar to how you would perform an ordinary $t$-test like you saw in STAT240.
+
+```{r}
+# #TODO: uncomment code below and take note of slope estimate.
+#Fist we run lm with mpg regressed on drat,
+#data=mtcars.small means use columns from this data frame,
+#then  extract coefficients from model
+
+summary(lm(mpg ~ drat, data=mtcars.small))$coefficients
+2*(1-pt(5.096042,30))
+
+# Code for extracting the coefficient beta_1
+output <- lm( mpg ~ drat, data=mtcars.small);
+output$coefficients[2]
+```
+
+c) Another way you can estimate the significance of $\beta_1$ under the null hypothesis of $\beta_1=0$ is by (you guessed it!) permuting the data!
+If indeed $\beta_1=0$ (i.e., in the language of our data set, there is no linear relation between `mpg` and `drat`), then permuting the $x$ coordinates (i.e., the independent variables) so they get assigned randomly to the $y$ coordinates (i.e., the responses) should have no effect.
+This is because $\beta_1=0$ implies the relationship between $y$ and $x$ is actually a flat line.
+   
+Write a function that performs $M$ iterations of the following:
+   
+   i. Randomly permute the $x$ coordinates (`drat` values).
+   ii. Use `lm` to run linear regression, regressing the $y$ coordinates (`mpg` values) against the permuted $x$ coordinates.
+   iii. Save the estimate for the slope.
+   
+   Run your function with at least $M=1000$ (can you get it to run with $M=10,000$ or even higher?), and compare the distribution of your $M$ estimated slopes against the the slope estimate of our original observed data set.
+   Use these $M$ replicates to obtain a $p$-value associated with our null hypothesis that there is no linear relation between `mpg` and `drat` (i.e., $H_0 : \beta_1=0$).
+   
+   - __Note:__ If the method in part (b) is accurate and the $p$-value is on the order of $10^{-5}$, you may need $10^5=100,000$ iterations to see a single case where the permuted slope is equal to or greater than the actual slope (in absolute value).
+   Thus, if you run a lower $N$ and don't see a single case, that's okay, it just means the $p$-value is so small that your simulation size cannot detect it.
+   This is what happened in our COVID vaccine example in lecture!
+
+```{r}
+### TODO: complete 2c here.
+permuted_slope_test <- function(data, M) {
+  observed_slope <- lm(mpg ~ drat, data = data)$coefficients[2]
+  permuted_slopes <- numeric(M)
+  
+  for (i in 1:M) {
+    permuted_data <- data
+    permuted_data$drat <- sample(data$drat, replace = FALSE)
+    
+    permuted_slope <- lm(mpg ~ drat, data = permuted_data)$coefficients[2]
+    permuted_slopes[i] <- permuted_slope
+  }
+  
+  p_value <- mean(abs(permuted_slopes) >= abs(observed_slope))
+  
+  return(list(observed_slope = observed_slope, p_value = p_value))
+}
+
+result <- permuted_slope_test(mtcars.small, M = 10000)
+print(result)
+```

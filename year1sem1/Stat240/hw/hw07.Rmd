@@ -1,0 +1,361 @@
+---
+title: "Assignment 07"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, include = TRUE,
+                      cache = TRUE, autodep = TRUE, error = TRUE)
+library(tidyverse)
+library(tidyjson)
+library(magrittr)
+source("../../scripts/viridis.R")
+```
+
+## Homework 7
+
+#### Due Friday, November 12, 11:59 PM CT
+
+- This data set must be done sequentially.
+- Each problem builds on previous work to build tidy data frame about countries of the world by extracting data from an untidy list object read in from a JSON file.
+- Early problems do most of the work for you.
+- Later problems ask you to replicate the creation of new variables modeling your answers on the solutions to the earlier problems.
+
+## Obtain the data
+
+For this assignment, we're going to be working with a JSON dataset of countries of the world.
+The data is on the course web page,
+but the original
+data may be found [**here**](https://raw.githubusercontent.com/mledoze/countries/master/countries.json).
+Save it to your computer in the course data data directory.
+
+Also read the [data description](https://github.com/mledoze/countries/#countries-data) to see what the variables mean and get an idea of how to access them.
+
+## Read data into R
+
+- This block of code uses `read_json()` from the **tidyjson** package to read the `.JSON` file into a list object in R
+- We then use `pluck()` from **purrr** to dive a bit into the tree structure of the data to get the country data
+    - At the root level, there are two objects:
+        - an integer with the name `document.id` and the value 1
+        - a list object with the name "..JSON" that has one element
+    - We want to get root element named "..JSON" and then pluck its one element to obtain a list object with one element per country.
+    - The first argument of `pluck()` (what we typically pipe in) is the list object.
+    - Subsequent arguments traverse down the list structure.
+    
+```{r}
+## Read in the countries
+countries = read_json("../../data/countries.json") %>% 
+  pluck("..JSON",1)
+
+## How many countries?
+length(countries)
+
+## How many elements of the first country list?
+length(countries[[1]])
+```
+
+### Problem 1
+
+The previous block of code shows that the `countries` list object has `r length(countries)` countries and that the first of these has information stored in a list with `r length(countries[[1]])` elements.
+
+Explain the steps of the following block of code to determine how many elements are in the list for each country by answering parts A and B below.
+
+```{r}
+prob1 = tibble(
+  n = countries %>% 
+    map_int(length)) %>%
+  distinct()
+prob1
+
+prob1 %>%
+  slice(10)
+
+prob1 %>%
+  summarize(min = min(n), max = max(n))
+```
+
+#### A
+
+What are the dimensions of `prob1`?    
+250x1
+
+What does each row represent?    
+the length of lists by country
+
+What does the value of `n` in row 10 of the tibble represent?   
+the value of 23 in row 10 represents that there are 23 elements in the countries list
+
+#### B
+
+Are there any countries with different numbers of elements in their list? Briefly justify your response.
+no, there aren;t any countries with different numbers of elements in their list as indicated by the distinct() function being called and no rows being returned.
+
+## Extracting data
+
+- We will practice extracting various fields from the data
+- We will build the extracted data into columns of a country data frame
+
+### Problem 2
+
+Recall that **purrr** contained a number of functions to iterate over a list and return data in various formats.
+Briefly describe the differences between these functions:
+
+- `map()`
+returns a list
+- `map_chr()`
+returns a vector of character value strings
+- `map_dbl()`
+returns a vector of double value
+- `map_int()`
+returns a vector of integers
+- `map_lgl()`
+returns a logical vector
+
+
+### Problem 3
+
+This block of code displays the names of the elements of the list for the first country (and presumably, for all countries).
+
+```{r}
+countries %>% 
+  pluck(1) %>% 
+  names()
+```
+
+The element "name" looks interesting.
+Let's examine it for the first two countries.
+
+```{r}
+## First country
+countries %>% 
+  pluck(1, "name")
+
+## Second country
+countries %>% 
+  pluck(2, "name")
+```
+
+The element "name" is a list with three elements:
+
+- `$common` is the common name of the country in English
+- `$official` is the official name of the country in English
+- `$native` is a list with varying number of elements:
+    - each element is a list with names that are three-letter codes for a language
+    - another level down has `$common` and `$official` entries for the common and official names of the country in those other languages.
+    
+Let's start our country data frame by adding columns with the common and official names of the country in two columns.
+
+- Complete this block of code to create a data frame named `countries_df` with columns `common_name` and `official_name`.
+- Note the use of braces `{` and `}` around the right-hand side of the pipe to prevent `countries` from being piped into `tibble()`.
+- Subsequent uses of `.` refer to the object on the left-hand side of the pipe, namely `countries`.
+
+```{r}
+countries_df = countries %>% 
+  {
+    tibble(
+      common_name = map_chr(., pluck, "name", "common"),
+      official_name = map_chr(., pluck, "name", "official")
+    )
+  }
+```
+
+
+### Problem 4
+
+Next, let's get the capital of each country.
+But some countries may have more than one capital.
+Examine the `capital` field for the first two countries.
+
+```{r}
+countries %>% 
+  pluck(1, "capital")
+
+countries %>% 
+  pluck(2, "capital")
+```
+
+It looks like each object `capital` is a list with the name (or names?) of the capital.
+Add a column to the `countries_df` data frame with a count of how many capitals there are.
+To get started, here is code which counts the length of the capital list for the first element of `countries`.
+
+```{r}
+countries %>%
+  pluck(1, "capital") %>%
+  length()
+```
+
+You now want to use appropriate **purrr** map functions to iterate over the 250 countries and extract the length of the capitol list for each.
+To do so,
+we can break this into steps:
+
+- First, iterate over the elements of `countries` to pluck the "capital" items into a list (which **purrr** function returns a list?), each item of which is itself a list
+- Second, iterate over the list we just created to extract the length of the list in each element
+    - For the first two countries, these lengths will be `1`.
+- These lengths will be integers.
+    - Which **purrr** function should you use?
+    
+Complete the following block by replacing the words FUN with the correct **purrr** function name.
+
+The block repeats the previous code to create a tibble directly from the `countries` list.
+You should also copy your code from an earlier solution to add the `offical_name` column.
+
+- Change the chunk option `eval = FALSE` to `eval = TRUE` or eliminate it before knitting
+
+```{r, eval = FALSE}
+countries_df = countries %>% 
+  {
+    tibble(
+      common_name = map_chr(., pluck, "name", "common"),
+      official_name = map_chr(., pluck, "name", "official"),
+      num_capitals = map(., pluck, "capital") %>% 
+        map_int(length)
+    )
+  }
+```
+
+
+
+### Problem 5
+
+Which countries have more than one capital?
+Use `filter()` on `countries_df` as modified by the previous problem to answer.
+
+```{r}
+countries_df = countries %>% 
+  {
+    tibble(
+      common_name = map_chr(., pluck, "name", "common"),
+      official_name = map_chr(., pluck, "name", "official"),
+      num_capitals = map(., pluck, "capital") %>% 
+        map_int(length)
+    )
+  } %>%
+  filter(num_capitals > 1)
+countries_df
+```
+
+
+### Problem 6
+
+We next wish to add a column `capital` with a string for all capitals separated by a slash "/".
+
+- For most countries, this will be a single word with the only capital.
+- For any country with more than one capital, this will be a single string with all capital names together, separated by a slash.
+- To succeed, we want to do the following:
+    - Iterate over `countries` and use a **purrr** function to pluck the `capital` field from each country, returned as a list.
+        - This will be a list with length the number of countries where each element is a list of one or more capital names
+    - Iterate over this list and use the command `str_c()` with argument `collpase = "/"` separately for each element of the list and return a vector of characters
+    
+Replace the values of `FUN` in the following block to modify the `tibble()` command from earlier, incorporating earlier answers
+
+```{r, eval = FALSE}
+## change to eval = TRUE and eliminate this comment when ready to knit
+countries_df = countries %>% 
+  {
+    tibble(
+      common_name = map_chr(., pluck, "name", "common"),
+      official_name = map_chr(., pluck, "name", "official"),
+      num_capitals = map(., pluck, "capital") %>% 
+        map_int(length),
+      capitals = map(., pluck, "capital") %>% 
+        map_chr(~{str_c(.x, collapse = "/")})
+    )
+  }
+```
+
+
+
+### Problem 7
+
+Print the data frame for all countries for which there are zero capitals or for which `num_capitals` is recorded as `1` but the capital string is "" (has string length equal to 0).
+
+Modify the data frame so that in each of these cases,
+the `num_capitals` value is `0L` (the integer 0) and the `capitals` string is "NA_character_" (the missing value with type character so it matches the non-missing value types)
+
+```{r}
+countries_df %>%
+  filter(num_capitals == 0 | capitals == "")
+
+countries_df %>%
+  mutate(capitals = case_when(capitals == "" ~ NA_character_,
+                              TRUE ~ capitals)) %>%
+  mutate(num_capitals = case_when(is.na(capitals) ~ 0L,
+                                  TRUE ~ num_capitals))
+```
+
+
+
+### Problem 8
+
+Following the previous examples, modify the code block to add the following variables:
+
+- `region`: the region of the world where the country is located
+- `subregion`: the sub-region of the world where the country is located
+- `un_member`: logical if the country is a member of the UN
+- `num_languages`: the number of languages in the field "languages"
+- `languages`: a vector separated by slashes (`/`) with the languages of each country.
+
+```{r}
+countries_df = countries %>%
+  {
+    tibble(
+      common_name = map_chr(., pluck, "name", "common"),
+      official_name = map_chr(., pluck, "name", "official"),
+      num_capitals = map(., pluck, "capital") %>%
+        map_int(length),
+      capitals = map(., pluck, "capital") %>%
+        map_chr(~{str_c(.x, collapse = "/")}),
+      region = map_chr(., "region"),
+      subregion = map_chr(., pluck, "subregion"),
+      un_member = map_lgl(., pluck, "unMember"),
+      languages = map(., pluck, "languages") %>%
+        map_chr(~{str_c(.x, collapse = "/")}),
+      num_languages = map(., pluck, "languages") %>%
+        map_int(length))
+  } %>%
+  mutate(capitals = case_when(capitals == "" ~ NA_character_, 
+                              TRUE ~ capitals)) %>%
+  mutate(num_capitals = case_when(is.na(capitals) ~ 0L, TRUE ~ num_capitals))
+countries_df
+```
+
+
+
+### Problem 9
+
+Create and print a full table that filters countries, keeping only those that are members of the United Nations, and then counts the number of countries in each region and sub-region, sorted by region (alphabetically) and by descending counts of the number of countries within each region.
+
+```{r}
+countries_df %>%
+  filter(un_member) %>%
+  summarize(region) %>%
+  count(region) %>%
+  arrange(desc(n))
+
+countries_df %>%
+  filter(un_member) %>%
+  summarize(subregion) %>%
+  count(subregion) %>%
+  arrange(desc(n))
+```
+
+
+
+### Problem 10
+
+Make a plot with a different facet for each region, each of which contains a barplot that counts the number of countries that have a given number of languages. Use a different fill color for each region.
+
+```{r}
+ggplot(countries_df, aes(x = num_languages, fill = region)) +
+  geom_bar() +
+  xlab("# of Languages") +
+  ylab("Countries") +
+  guides(fill = guide_legend(title = "Country")) +
+  facet_wrap(~region) +
+  ggtitle("Number of Languages by Region")
+```
+
+
+

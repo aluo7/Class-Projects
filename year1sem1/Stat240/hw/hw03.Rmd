@@ -1,0 +1,202 @@
+---
+author:
+title: "Assignment 3"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, fig.height = 3)
+library(tidyverse)
+library(lubridate)
+library(scales)
+source("../../scripts/viridis.R")
+```
+
+#### Due Sunday, October 3, 11:59 pm CT
+
+### Problems
+
+The following R chunk reads in the default exoplanet data,
+selects some variables, and changes some variable names.
+
+```{r read-planet-data}
+## Read in the csv file
+## Select some variables that we will work with and rename them
+## Note that the file begins with 100 meta-data lines that this code skips
+## The argument `comment = "#"` fails as the symbol '#' appears in some of the websites included in the data set which are then interpreted as comments, preventing the full case to be read in as data
+planets = read_csv("../../data/exoplanets_default_2021-06-15.csv",
+                   skip = 100) %>%
+  select(pl_name, hostname, discoverymethod,
+         disc_year, sy_pnum, pl_rade, pl_bmasse) %>%
+  rename(planet = pl_name,
+         star = hostname,
+         method = discoverymethod,
+         year = disc_year,
+         number = sy_pnum,
+         radius = pl_rade,
+         mass = pl_bmasse) 
+```
+
+### 1
+
+Using the exoplanet data table `planets`, filter so that you only use planets discovered by the transit method. Remove cases where either of the variables `year` or `radius` are missing. Create a table with a data summary with the number of planets discovered and the mean radius of these planets by year. Then make a plot of the data such that: the size of points are proportional to the number of planets discovered that year; the axes have descriptive labels; and the plot contains an informative title.
+
+```{r}
+p1 = planets %>%
+  filter(method == "Transit") %>%
+  drop_na(year, radius) %>%
+  group_by(year) %>%
+  summarize(n = n(), ravg = mean(radius))
+ggplot(p1, aes(year, ravg)) +
+  geom_point(aes(size = n)) +
+  labs(x = "Year", y = "Mean Radius", title = "Planets Discovered By Year")
+```
+
+### 2
+
+Using the planets data set created at the beginning of the assignment, determine which methods have been used to discover fewer than ten planets each.
+After removing these planets discovered by methods,
+for the remaining planets, summarize for each year, the number of planets and the proportion of planets discovered by each method.
+Proportions should sum to one in each year.
+This data summary should have one row for each year and method (if the method was used in that year) and columns with the names `year`, `method`, `n`, and `proportion`.
+*(Hint: you may find it helpful to create a `total` column with the total number of exoplanets discovered each year repeated for each row to help calculate the proportion.)*
+
+#### (a) 
+
+```{r}
+p2 = planets %>%
+  count(method) %>%
+  filter(n >= 10) %>%
+  pull(method)
+p2
+
+p02 = planets %>%
+  filter(method %in% p2) %>%
+  count(year, method) %>%
+  group_by(year) %>%
+  mutate(total = sum(n), proportion = n / total)
+head(p02, 15)
+  
+```
+
+#### (b) 
+
+Create a graph with the year on the x axis, the proportion of discovered planets on the y axis,
+and connect points from the same method with a line, using a different color for each method.
+Use appropriate axis labels and plot title.
+
+```{r}
+ggplot(p02, aes(x = year, y = proportion, color = method)) +
+  geom_point() + 
+  geom_line() +
+  ylab("Proportion") +
+  xlab("Year") +
+  ggtitle("Proportion of Discovered Planets by Year")
+```
+
+
+#### (c)
+
+Which method was used predominantly from the earliest discoveries of exoplanets and which method has supplanted that method in relative popularity in recent years?
+Radial Velocity was used most predominantly for the earliest discoveries of exoplanets, though it has been surpassed by the Transit method in recent years.
+
+### 3
+
+Begin with the data summary from the previous problem.
+Filter to only include years from 2001 -- 2020.
+Display the counts of exoplanets discovered by method in an alternative manner using bar graphs
+with year on the x axis, different fill colors for each method,
+and the counts of the number of planets for each year and method on the y axis using the function `geom_col()`.
+Do not stack the bars for each year, but rather display them next to each other in a clump by each year label.
+(*Note: The default is to stack bars. Use the argument `position = position_dodge2(preserve = "single")` inside of `geom_col()` to avoid stacking and to preserve the same bar width when the number of methods present changes by year.*)
+
+```{r}
+p3 = p02 %>%
+  filter(year >= 2001, year <= 2020) %>%
+  ggplot(p02, aes(x = year, y = proportion, fill = method)) %>%4
+  geom_col(position = position_dodge(preserve = "single"))
+p3
+```
+
+
+### 4
+
+Using the planet data set created at the beginning of the assignment,
+filter to remove planets discovered by a method used discover fewer than ten planets as well as keeping only planets discovered between 2001 and 2020.
+
+Using this filtered data set, create a bar graph using `geom_bar()` which displays the number of planets discovered by each of the remaining methods over these years.
+Do not stack the bars and use different fill colors for each method.
+(*Note: When using the function `geom_bar()`, you do not specify the y aesthetic as the function will do the work of creating the counts. The graph will look the same as in the previous problem.*)
+
+
+```{r}
+
+
+```
+
+
+### 5
+
+Create a table with the subset of the planet data considering only planets discovered using the method `Radial Velocity` with discovery years in the sequence 1998, 2002, 2006, 2010, 2014, and 2018 and for which the mass is estimated. For this subset of the planets, calculate *for each year* the number of planets, and the minimum, median, and maximum values of the mass.
+
+-  Print these summary statistics in a table by year, so that each row corresponds to a different year and the columns are `year`, `n`, `min`, `median`, and `max`.  
+-  Answer the question below the code chunk.
+
+
+```{r}
+## Add your code here
+```
+
+**Describe the trend between year and minimum mass of planet discovered using Radial Velocity.**
+
+
+
+### 6
+
+Only a handful of planets have both an estimated mass AND an estimated radius less than those of the Earth.  What are the names of these planets, what method(s) were used to detect them, and in what year were they discovered?
+
+- Create a data summary table with the planet name, star name, method, mass, and radius of the planets that have **both** an estimated mass < 1 Earth mass and an estimated radius < 1 Earth radius.  
+- Order the rows increasing by mass.
+- Print the entire table.
+
+```{r}
+## Add your code here
+```
+
+
+### 7
+
+Use the official Madison weather data.
+For each date where there is no missing data for the maximum and minimum temperature,
+calculate the difference between the maximum and minimum temperatures.
+Find the median, mean, and standard deviations of these values for each month and display the results in a table.
+
+```{r}
+
+```
+
+
+### 8
+
+Use the official Madison weather data.
+
+### (a)
+
+Determine the mean maximum and minimum temperatures for each day of the year for the period from 1991 -- 2020.
+Graph these values with line plots, one for maximum, one for minimum, for each day of the month with a different facet for each month of the year.
+
+```{r}
+
+```
+
+### (b)
+
+Find the ten days of the year which have the largest gap between the average high and low temperatures using data from 1991 -- 2020. Display these values in a table, ordered with the largest gaps at the top.
+
+```{r}
+
+```
+
+

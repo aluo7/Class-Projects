@@ -1,0 +1,222 @@
+---
+author: 
+title: "Assignment 4"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, fig.height = 3)
+library(tidyverse)
+library(lubridate)
+library(scales)
+source("../../scripts/viridis.R")
+```
+
+#### Due Sunday, October 10, 11:59 pm CT
+
+### Problems
+### 1
+
+The next few questions involve five data sets involving international flights arriving to Chicago's O'Hare airport from January 1, 2016 through December 31, 2020
+with one separate file for each year.
+Each file has been cleaned from the original HTML.
+
+Each data set is in a separate CSV file:
+`ORD-2016.csv`, `ORD-2017.csv`, `ORD-2018.csv`, `ORD-2019.csv`, and `ORD-2020.csv`.
+
+- Read in the five data sets. 
+- Use `bind_rows()` to combine these data sets into a single data set.  
+- Add columns for *year*, *month* (character valued, use month abbreviations, Jan-Dec), *day* (day of the month), and *wday* (day of the week, character valued, use day abbreviations, Sun - Sat).  
+- Reorder the variables so that these new variables all appear directly after the date column.  
+- Remove the terminal variable.  
+- Rename *all_total* to *passengers*, *all_flights* to *flights*, and *all_booths* to *booths*.  
+- Arrange the rows by date and hour.  
+- Remove the individual data sets from each individual year (use `rm()`).  
+- Print the first 20 rows of the data frame and at least 4 columns.  
+
+```{r}
+ord2016 = read_csv("../../data/ORD-2016.csv")
+ord2017 = read_csv("../../data/ORD-2017.csv")
+ord2018 = read_csv("../../data/ORD-2018.csv")
+ord2019 = read_csv("../../data/ORD-2019.csv")
+ord2020 = read_csv("../../data/ORD-2020.csv")
+
+all_ord = bind_rows(ord2016, ord2017, ord2018, ord2019, ord2020) %>%
+  mutate(year = year(date), month = month(date, label = TRUE), day = day(date), wday = wday(date, label = TRUE)) %>%
+  select(year, month, day, wday, hour, all_total, all_flights, all_booths, everything()) %>%
+  rename(passengers = all_total, flights = all_flights, booths = all_booths)
+all_ord %>%
+  slice(1:20)
+```
+
+- After these changes, how many rows and columns are in the complete data set?
+
+20x8
+
+
+### 2
+
+> Are there any dates in the range from January 1, 2016 through December 31, 2020 that are missing? If so, which ones?
+
+```{r}
+temp = tibble(date2 = seq(ymd("2016-01-01"), ymd("2020-12-31"), 1))
+temp2 <- all_ord %>% 
+  mutate(date2 = str_c(year, month, day,  sep = "-"), date2 = ymd(date2)) %>%
+  distinct(date2)
+anti_join(temp, temp2)
+```
+
+
+### 3
+
+>  Analysis of monthly international arrivals.
+
+- Display the total number of passengers by month and year with a bar chart where month is the primary variable on the x-axis and there is a separate bar (i.e, not stacked) and filled with a different color for each year.  
+- Add meaningful axis and legend labels and a title to this graph. (Consider using the the function `guides()` to change the legend title.)
+- Change the scale on the y axis so that values are printed as numbers with commas and not using scientific notation. (See the help for the **ggplot2** function `scale_y_continuous()` and the **scales** function `label_comma()`.)  
+-  Answer the question below.
+
+```{r}
+ggplot(all_ord, aes(x = month, y = passengers, fill = as.character(year))) +
+  geom_col(position = "dodge") +
+  scale_y_continuous(label = comma) +
+  xlab("Month") +
+  ylab("Passengers") +
+  guides(fill=guide_legend(title="Year"))
+```
+
+**In the 2020 months, how do the passenger totals compare to the previous year?  Describe any other patterns you notice.**
+The passenger totals are significantly lower in the 2020 months in comparison to the previous year. This is likely due to COVID restricting travel.
+
+### 4
+
+> Investigate the average number of passengers per day of the week.
+
+- Create a table that contains the average number of passengers arriving for each day of the week (Sun - Sat) for each year (2016--2020). (This table should have three columns: the year, the day of the week, and the number of passengers.)
+- Create a graphic that displays a bar for each day of the week with the height of the bar at the average number of passengers for that day of the week with a separate facet for each year.
+-  Choose fill colors for the bars according to year.
+-  Add descriptive axis labels and a title.  
+-  Try `guides(fill = guide_legend(title="Year"))` to improve the legend appearance.  
+
+```{r}
+wday_pass = all_ord %>%
+  select(year, month, day, wday, passengers) %>%
+  group_by(year, month, day, wday) %>%
+  summarize(passengers = sum(passengers)) %>%
+  group_by(year, wday) %>%
+  summarize(n = n(), passengers = sum(passengers), average = passengers/n)
+
+ggplot(wday_pass, aes(x = wday, y = average, fill = as.character(year))) +
+  geom_col(position = "dodge") +
+  scale_y_continuous(label = comma) +
+  xlab("Weekday") +
+  ylab("Average Passengers") +
+  guides(fill=guide_legend(title="Year"))
+```
+-  Answer the questions below.
+
+Which day of the week has the highest average number of passengers for each year?
+Saturday
+Which day of the week has the lowest average number of passengers for each year?
+Tuesday
+
+
+### 5
+
+>  same as question 3
+
+### 6
+
+> Average waiting time comparison between US and Non-US passport holders by season.
+
+- Add a `season` column to the combined data set which is "Spring" for March - May, "Summer" for June - August, "Fall" for September - November, "Winter" for December - February.  **Hint:** There are different ways to define this new variable, but you may want to look into the function `case_when()` to set values of the `season`.  Run `?case_when()` in your console for more information.  
+- Make a scatter plot with the average time for US passengers on the x-axis and the average time for non-US passengers on the y-axis with a point for each row of the data set.
+-  Use different colors for each season.  
+- Plot the data from different years in different facets.  
+- Add a straight line to each plot that passes through the origin with a slope of one (explore `geom_abline()` to do this).  
+-  Add straight regression lines to each plot, separately for each season (`geom_smooth()` with `method = "lm"`).  
+
+```{r}
+avg_time = all_ord %>%
+  select(month, passengers, us_avg_wait, non_us_avg_wait, year) %>%
+  mutate(season = case_when(month == "Mar" | month == "Apr" | month == "May" ~ "spring",
+            month == "Jun" | month == "Jul" | month == "Aug" ~ "summer",
+            month == "Sep" | month == "Oct" | month == "Nov" ~ "fall",
+            month == "Dec" | month == "Jan" | month == "Feb" ~ "winter", 
+            TRUE ~ "NA"))
+
+ggplot(avg_time, aes(x=us_avg_wait, y=non_us_avg_wait, color = season)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  geom_abline(slope = 1, intercept = 0) +
+  facet_wrap(~year)
+
+```
+- Answer the questions below.
+
+
+Are there any noteworthy patterns to the data?
+General positive slope, there is a higher average wait time for non us passengers in comparison to us passengers as indicated by the slope being larger than 1. Further, the wait rarely ever exceeds 60 for us passengers, and rarely ever exceeds 100 for non us passengers. Each year shares a similar line of best fit.
+
+What are the primary differences between US and Non-US passengers, and are the patterns different for different seasons?
+Data doesn't seem to vary too much, however more exceptions are found in both the summer and spring seasons. The winter months tend to have the shortest wait times, while spring and summer usually have the highest wait times.
+
+
+### 7
+
+Calculate separately for each year, the fraction of cases (a case is a single hour on a single date) for which the average time to get through passport control is greater for non US passport holders than it is for passport holders. Comment on how these values relate to the graphs in the previous problem.
+
+```{r}
+greater_than = all_ord %>%
+  group_by(year) %>%
+  select(year, us_avg_wait, non_us_avg_wait) %>%
+  mutate(diff = non_us_avg_wait - us_avg_wait) %>%
+  summarize(prop = sum(diff > 0)/n())
+greater_than
+```
+Comment on how these values relate to the graphs in the previous problem.
+The slope for all of the graphs was always greater than 1, which indicated the wait for non_us_wait times was almost always larger than the wait for us_wait_times. This is reflected in the proportions, proving that the non_us_wait times is greater than us_wait_times for a majority of cases.
+
+
+### 8
+
+- Add a column named `booth_rate` to the data set which estimates the average number of passengers per booth per hour. For example, if 1000 passengers arrive between 05:00 and 06:00, the average wait time is 40 minutes, and there are 10 booths open, then an estimate of the total number of passengers per booth per hour could be computed like this: 1000/10 = 100 passengers per booth; (40 minutes per passenger / 1 hour per 60 minutes) = 2/3 hours per passenger; booth rate = 100 / (2/3) = (1000 * 60) / (10 * 40) = 150 passengers per booth per hour. This is an estimate because it assumes available booths change on the hour and it ignores how rates change when passenger wait durations stretch into the next time period.  
+- Add another column called `time_of_day` which takes the value "overnight" from 1am to 5am, "early morning" from 5am to 8am, "morning" from 8am to noon, "afternoon" from noon to 5pm, and "early evening" from 5pm to 8pm, and "late evening" from 8pm to 1am.  
+- Use `reorder()` to put the `time_of_day` variable in this order.  
+-  Filter out cases where there are fewer than 200 total passengers, the average wait time is zero, or the booth rate is over 500.  
+-  Make side-by-side boxplots of the booth rate versus the day of the week using different colors for each day of the week, and different facets for each time of day.  
+
+```{r}
+avg_booth = all_ord %>%
+  select(wday, booths, hour, passengers, all_avg_wait) %>%
+  mutate(pass_total = sum(passengers), booth_total = sum(booths),booth_rate = pass_total * 60 / booths * all_avg_wait) %>%
+  mutate(time_of_day = case_when(
+hour %in% c("2000 - 2100","2100 - 2200","2200 - 2300","2300 - 0000","0000 - 0100") ~ "late evening",
+hour %in% c("1700 - 1800", "1800 - 1900", "1900 - 2000") ~ "early evening",
+hour %in% c("1200 - 1300", "1300 - 1400", "1400 - 1500", "1500 - 1600", "1600 - 1700") ~ "afternoon",
+hour %in% c("0800 - 0900", "0900 - 1000", "1000 - 1100", "1100 - 1200") ~ "morning",
+hour %in% c("0500 - 0600", "0600 - 0700", "0700 - 0800") ~ "early morning",
+hour %in% c("0100 - 0200", "0200 - 0300", "0300 - 0400", "0400 - 0500") ~ "overnight"), order_of_day = case_when(
+hour %in% c("2000 - 2100","2100 - 2200","2200 - 2300","2300 - 0000","0000 - 0100") ~ 5,
+hour %in% c("1700 - 1800", "1800 - 1900", "1900 - 2000") ~ 4,
+hour %in% c("1200 - 1300", "1300 - 1400", "1400 - 1500", "1500 - 1600", "1600 - 1700") ~ 3,
+hour %in% c("0800 - 0900", "0900 - 1000", "1000 - 1100", "1100 - 1200") ~ 2,
+hour %in% c("0500 - 0600", "0600 - 0700", "0700 - 0800") ~ 1,
+hour %in% c("0100 - 0200", "0200 - 0300", "0300 - 0400", "0400 - 0500") ~ 6), x = reorder(time_of_day, order_of_day))
+  
+  ggplot(avg_booth, aes(x = wday, y = booth_rate, color = wday)) +
+    geom_boxplot() +
+    facet_wrap(~x) +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    ylab("Passengers Per Booth") +
+    ggtitle("Are some airports more efficient", subtitle = "in the number of people served by hour per available booth?")
+  
+  
+```
+-  Answer the question below.
+
+Which time of day has the lowest booth rate?
+
+

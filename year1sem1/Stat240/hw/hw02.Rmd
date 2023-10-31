@@ -1,0 +1,283 @@
+---
+author:
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE)
+library(tidyverse)
+library(lubridate)
+```
+
+## Assignment 2
+
+- Replace the text YOUR NAME HERE in the YAML section with your name.
+- Execute the code in the chunk below to read in the Lake Monona data. *(Note: this data set is different than that used in lecture.)*
+    - If there is an error, check to see if there is a `data` directory two directories up that contains the data file.
+- Post questions on our Piazza site, visit the Learning Center, or attend office hours if you have questions.
+    
+```{r read-data, echo = FALSE}
+## The echo = FALSE argument to this chunk
+##   means that the code will not appear in the output
+##   but the code will run so that the data is in the session
+
+## Read Lake Monona data
+## Remove rows with missing data
+monona = read_csv("../../Data/lake-monona-winters-2021-1.csv") %>%
+  drop_na()
+```
+
+### Problems
+
+### 1
+
+The following code makes a histogram of the `duration` variable in the Lake Monona data set.
+
+```{r problem1, fig.height = 3}
+ggplot(monona, aes(x=duration)) +
+  geom_histogram(boundary=0, binwidth=10, color="black", fill="white")
+```
+
+Approximately how many winters had between 40 to 70 days where Lake Monona was at least 50% covered with ice?
+
+### Response
+
+11 winters
+
+### 2
+
+Modify the code below so that in the resulting plot:
+
+- one of the bins is centered at 70 days
+- the width of each bin is 5 days
+- the color of the interior of the bars is "forestgreen"
+- the color outlining the bars is "darkviolet"
+- the x label says "Days Closed with Ice"
+- the y label says "Total"
+- there is a title with words of your choosing that describe the figure
+
+```{r problem2}
+## modify this code
+ggplot(monona, aes(x = duration)) +
+  geom_histogram(center = 70, binwidth = 5, color = "darkviolet", fill = "forestgreen") +
+  labs(title = "Lake Monona Freeze Durations", x = "Days Closed with Ice", y = "Total")
+```
+
+### 3
+
+Create a line plot with `duration` on the y axis and `year1` on the x axis. Add a blue smooth curve and a straight red line which estimate the trends.
+Modify axis labels and add an appropriate title.
+
+```{r problem3}
+ggplot(monona, aes(x = year1, y = duration)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  geom_smooth(method="lm", se=FALSE, color = "red") +
+  ylab("Year") +
+  xlab("Total Days Frozen") +
+  ggtitle("Lake Monona Freeze Durations")
+```
+
+- Compare the curve and the straight line; does the curve differ from the straight line in an important manner?
+- To the nearest five days, about how long was Lake Monona closed with ice in a typical year near 1875 (i.e., what is the approximate value of the smooth curve or straight line around 1875)?
+- To the nearest five days, about how long was Lake Monona closed with ice in a typical year near 2000 (i.e., what is the approximate value of the smooth curve or straight line around 2000)?
+
+### Response
+
+No, the curve doesn't differ significantly from the straight line
+~145 Days
+~35 Days
+
+### 4
+
+The next chunk of code adds columns to the `monona` data set which contain the fitted values ($\hat{y}_i$ in the notation of the lecture notes) and the residuals after fitting a straight line simple regression model to the data.
+You do not need to examine or understand this code chunk.
+
+```{r}
+## Fit the model
+fit = lm(duration ~ year1, data = monona)
+
+## Add fitted values and residuals to the data set
+monona = monona %>% 
+  mutate(fitted = fitted(fit),
+         residuals = residuals(fit))
+```
+
+Make a plot of the residuals versus year1.
+Add a horizontal line with an intercept at zero. *(See example from lecture using `geom_hline()`)*.
+Add a smooth curve to this residual plot as well.
+
+```{r}
+ggplot(monona, aes(x=year1, y=residuals))+
+  geom_point() +
+  xlab("Year") +
+  ylab("Residuals") +
+  geom_hline(yintercept = 0, color="hotpink", linetype="dashed") +
+  geom_smooth(se=FALSE) +
+  geom_point()
+```
+Using the informal interpretation discussed in lecture,
+what evidence from the residual plot indicates that a straight-line simple regression model for the duration that Lake Monona is frozen versus time is an adequate model?
+
+### Response
+
+The straight-line regression model is strongly centered around 0,
+and doesn't seem to indicate any significant skewness away from 0 at
+any points in the graph. The graph is roughly normal.
+
+
+### 5
+
+The next chunk of code adds a variable `winter_day` to the `monona` data set which counts the number of days after the previous June 30 on which Lake Monona first freezes.
+You do not need to examine or understand this code.
+
+```{r}
+## add winter_day = #days of first freeze after June 30
+monona = monona %>% 
+  mutate(winter_day = as.numeric(
+    first_freeze - ymd(str_c(year1,"-06-30"))))
+```
+
+Make a histogram of this variable with bins of width 5 centered
+and one bin centered at 154 (which corresponds to December 1).
+Select different colors to shade the interior and the boundaries of the bars.
+Add appropriate axis labels and a plot title.
+
+```{r}
+## Make the histogram
+ggplot(monona, aes(x = winter_day)) +
+  geom_histogram(center = 154, binwidth = 5, color = "blue", fill = "cyan") +
+  labs(title = "Days Until First Freeze", x = "Days After June 30", y = "Total Years")
+```
+
+
+### 6
+
+Recreate the plot from the previous problem,
+but modify scale of the x axis so that the axis is labeled with the dates Dec 1, Dec 16, Dec 31, Jan 15, Jan 30 at the values
+154, 169, 184, 199, 214.
+You will use the function `scale_x_continuous()` to change the scale of the x axis.
+*(Hint: See an example changing the scale of the y axis in lecture 5)*.
+
+```{r}
+ggplot(monona, aes(x = winter_day)) +
+  geom_histogram(binwidth = 5, center = 154, color = "darkviolet", fill = "forestgreen") +
+  xlab("Days after June 30") +
+  ylab("Count") +
+  ggtitle("Lake Monona First Freeze Distribution",
+          subtitle = "1851 - 2021") +
+  scale_x_continuous(breaks = seq(154, 214, by=15),
+                     labels = c("Dec 1", "Dec 16", "Dec 31", "Jan 15",
+                                "Jan 30"))
+```
+
+### 7
+
+The next chunk of code reads in the exoplanet data discussed in the course notes, reduces the data set to a few variables, renames these,
+and drops observations with missing masses.
+You do not need to read or comment on this code chunk.
+
+```{r}
+## Note: the file begins with 100 comment lines which we skip
+exo = read_csv("../../data/exoplanets_default_2021-06-15.csv", skip = 100) %>% 
+  select(pl_name, hostname, discoverymethod, pl_bmasse) %>%
+  rename(planet = pl_name,
+         star = hostname,
+         method = discoverymethod,
+         mass = pl_bmasse) %>% 
+  drop_na(mass)
+```
+
+The following code chunk makes a boxplot of the planet masses (units are in Earth masses, so 10 is ten times the mass of Earth) versus the method of discovery.
+
+```{r}
+ggplot(exo, aes(x = method, y = mass)) +
+  geom_boxplot()
+```
+
+What are some faults that this basic plot has?
+
+### Response
+
+You can't read any of the methods that were used to determine the mass
+because they overlap
+The boxplots themselves are drawn extremely due to one large outlier,
+thus making the data extremely unclear
+
+
+The next code chunk adds several lines of code.
+Explain the effect that each additional line highlighted with a comment does to the plot.
+Try running the code with the indicated lines commented out or seek information from R Studio help, the *R for Data Science* textbook, or a Google search about each command and argument to understand what it does.
+
+```{r}
+## You may need to install the scales package if the next line causes an error
+library(scales)
+
+## Make the side-by-side boxplots
+ggplot(exo, aes(x = method, y = mass)) +
+  geom_boxplot() +
+  ## (A) What does the following line do?
+  scale_y_continuous(trans = "log10", label = comma) +
+  xlab("Method of Detection") +
+  ylab("Mass (Earth masses)") +
+  ## (B) What does the following line do?
+  coord_flip()
+```
+
+### Response
+
+#### (A) effect of scale_y_continuous()
+##### trans = "log10"
+
+This line centers the boxplots more on the x axis to allow for easier
+viewing, transforming it by log10
+
+##### label = comma
+
+Adds a comma in the x axis for the numbers at the thousandths place
+
+#### (B) effect of coord_flip()
+
+This line flips the x and y axes so that the box plot is horizontal
+rather than vertical
+
+
+
+### 8
+
+Create a density plot of the variable `mass` from the exoplanet data set.
+Use different colors for the interior of the density and the boundary line.
+Describe the shape of exoplanet masses.
+
+```{r}
+ggplot(exo, aes(x=mass)) +
+  geom_density(color="black", fill="purple") + 
+  xlab("Mass") +
+  ylab("Density") +
+  ggtitle("Exoplanet Mass Density") +
+  xlim(0, 3500)
+```
+
+### Response
+
+The mass is right skewed with a majority of its data being collected between the mass 0-1000.
+
+Make a second density plot for the base-10 logarithm of masses instead.
+Describe the shape of the log-transformed exoplanet masses.
+
+```{r}
+ggplot(exo, aes(x=log10(mass))) +
+  geom_density(color="black", fill="yellow") + 
+  xlab("Mass") +
+  ylab("Density") +
+  ggtitle("Exoplanet Mass Density") +
+  xlim(0, 5)
+```
+
+### Response
+
+Bimodal with no observable pattern, majority of data observed between
+masses 2 and 4
+

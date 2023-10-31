@@ -1,0 +1,323 @@
+---
+title: "STAT 240 Discussion 9"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
+library(tidyverse)
+library(lubridate)
+source("../../scripts/viridis.R")
+source("../../scripts/ggprob.R")
+```
+
+\newcommand{\E}{\mathsf{E}}
+\newcommand{\Var}{\mathsf{Var}}
+\renewcommand{\prob}{\mathsf{P}}
+
+## Group 333:B (use the assigned group name/number)
+Tony Chen, Clare Bradley, TYLER GEE, ALAN LUO, ASEEM SHARMA
+
+
+## Introduction
+
+In this report, our group focused on the trend of water temperature from 2014 to 2017 in the Lake Michigan beachfront of Chicago. Since climate change has been posing an increasingly challenging risk to the planet, we want to observe how a specific body of water has been affected in a few short years, and how temperature correlates to other variables in the lake. We believe that water average temperature will increase from 2014 to 2017, and it will change the other variables studied. 
+
+## Background Section:
+
+Chicago is located in the Midwest of the United States, on the Lake Michigan lakefront, along this area, there are beaches, parks and other attractions. Water temperature is a physical property expressing how hot or cold water is, and rapid temperature increase in Lake Michigan might have an adverse effect on aspects of the lake. A general consensus among climate scientists is that average temperature of the Earth is changing, but this might vary in different areas and different ecosystems. In this report, we are going to focus on how water temperature correlates to aspects of Lake Michigan, as well as the trends between independent variables overtime. We examine hourly records to find trends and correlations over time. Beach Water Quality records date back to May 15, 2014, and continue to be updated presently, seemingly on a yearly basis. The Beach Water Quality dataset has been collected by the Chicago Park District, maintaining sensors in the water at beaches along Chicago’s Lake Michigan lakefront. Sensor locations change from time to time, though, due to the Park District’s operational needs (mainly water quality). Further, during some seasons and at some times, information from the sensors may not be available. As such, we chose not to include 2013 in our set, as there wasn’t enough data present to make any significant conclusions. Other significant variables of interest are beach name, water temperature, turbidity, wave height, and wave period. We will use all of the other variables in order to observe any trends from beach to beach, allowing us to make significant conclusions if the data follows similar trends despite occurring at different locations. We will use the water temperature (measured in Celsius), turbidity (a measurement of how cloudy the water is), the height of the wave, and the period (distance between the waves) of the wave, in order to make observations about each beach, as well as any changes that take place as hours, seasons, and years pass.
+
+
+```{r, echo = FALSE}
+library(kableExtra)
+ 
+beach_variables = tibble(
+  Name = c("beach", "time", "temp", "turbidity", "wave_height", "wave_period"),
+  Description = c("Name of the beach data is collected at",
+                  "Time the data was collected at",
+                  "Temperature of the water",
+                  "Turbidity (cloudiness) of the water",
+                  "Height of the waves (measured in meters)",
+                  "Period (distance between peaks) of the waves (measured in meters"))
+ 
+beach_variables %>% 
+  kable(caption = "Key Variables from the Beach Water Quality dataset") %>% 
+  kable_styling(position = "left", full_width = FALSE,
+                bootstrap_options = c("striped"))
+```
+
+
+```{r}
+#read and rename data 
+beach = read_csv("../../data/bwq.csv")
+
+beach = beach %>% rename(date = `Measurement Timestamp`, beach_name = `Beach Name`, water_temp = `Water Temperature`, trans_depth = `Transducer Depth`, wave_height = `Wave Height`, wave_period = `Wave Period`, battery_life = `Battery Life`, turbidity = Turbidity)
+
+beach
+```
+
+```{r}
+#seperate the date column into date and time column
+
+beach1 = beach %>% mutate(date_mdy = str_match(date, "\\d+.\\d+.\\d+")) %>% mutate(time = str_match(date, "\\s.+")) %>% mutate(date = mdy(date_mdy)) %>% select(-date_mdy) %>% filter(!(wave_height < 0)) %>% filter(!(wave_period < 0)) %>% filter(!(water_temp == 0)) %>%  mutate(year = year(date), month = month(date), day = day(date)) %>% filter(!(year == 2013)) %>% filter(beach_name == "Ohio Street Beach") %>% filter(!(month == 5)) %>% select(-trans_depth) %>% drop_na() %>% select(beach_name, year, month, day ,water_temp, wave_period, wave_height, turbidity)
+beach1 
+
+
+```
+## Graph One 
+
+```{r}
+
+beach3 = beach1 %>% group_by(year) %>% summarize(water_temp = mean(water_temp))
+                                                 
+                                                 
+```
+
+```{r}
+
+beach3 %>% ggplot(aes(x = year, y = water_temp))+
+  geom_smooth(se = FALSE) +
+  ggtitle("The water temperature over 2014 to 2017") +
+  xlab("Year") +
+  ylab("Water temperature")
+
+```
+
+
+## Graph Interpretation
+
+The graph shows the average temperature of year 2014-2017. The blue line curve shows a smooth increasing trend of the water temperature through the data. From the graph, we could see that as the year increases the water temperature also increases. Thus we suspect that the a linear regression model could fit and predict the water temperature in the future. 
+
+## Two Sided T Test Against the water temperature mean in 2014 and 2017: 
+
+Test the hypothesis that the mean water temperature are equal in 2014 and 2017 versus the two-sided alternative that they are not.
+
+
+1. Define parameters and a model
+
+Xi∼F1(μ1,σ1)
+Yi∼F2(μ2,σ2)
+
+2. State hypotheses
+
+Null Hypothesis H0:μ1=μ2 
+Alternative Hypothesis Ha:μ1≠μ2
+
+```{r}
+beach_analysis = beach1 %>% filter(year == 2014 | year == 2017) %>% group_by(year) %>% summarize(n = n(), water_temp_avg = mean(water_temp), std = sd(water_temp), se = std/sqrt(n)) %>% mutate(t.975 = qt(.975, n-1)) %>% mutate(lower = water_temp_avg - t.975*se) %>% mutate(high = water_temp_avg + t.975*se)
+#mutate(std = sd(water_temp)) %>% select(water_temp, std)
+
+beach_analysis
+```
+
+### Interpreatation:
+
+
+We are 95 % confident that water temperature in year 2014 is between 19.73301 and 19.95280.
+We are also 95 % confident that water temperature in year 2017 is between 1.960955 and 20.88283
+
+
+```{r}
+beach_2014_mean = beach1 %>% filter(year == 2014) %>% pull(water_temp)
+beach_2017_mean = beach1 %>% filter(year == 2017) %>% pull(water_temp)
+t.test(beach_2014_mean, beach_2017_mean)
+```
+
+
+### Interpretation:
+
+There is very strong evidence (p-value < 2.2e-16, two-sided t-test) that the average water temperature of 2014 and 2017 are not equal. 
+
+### Graph:
+
+```{r}
+gt(4298.7, a = -5, b = 5) +
+  geom_t_fill(96.396, a = -15, b = -12.171) +
+  geom_t_fill(96.396, a = 12.171, b = 15) +
+  xlab("t statistic") +
+  ggtitle("P-value visualization",
+          subtitle = "4298.7 df, t = -12.171") +
+  theme_minimal()
+
+```
+
+
+## Discussion
+
+We were able to find our p value, which was 2.2e-16. From this, we can suggest that there are in fact statistically significant differences between the average temperature of Lake Michigan’s waterfront in 2014 and 2017. A potential shortcoming in this data set could be some of the inconsistencies between years, including the difference between amount of data recorded for 2014, 2002, versus 2017, which was 2397. While they were recorded over the same months of the year, there might have been issues with recording data leading to differences in amount recorded each year. In conclusion, we found that there is potential evidence that there is a difference in the means between 2014 and 2017. 
+
+
+## Graph Two
+
+```{r}
+
+beach2 = beach1 %>% group_by(year, month) %>% summarize(water_temp = mean(water_temp))
+beach2
+
+```
+
+```{r}
+beach2 %>% ggplot(aes(x = month, y = water_temp)) +
+  geom_smooth(se = FALSE)+
+  facet_wrap(~year) +
+  ggtitle("Average Annual Temperature in Madison 2014-2017") +
+  xlab("month") +
+  ylab("water temperature")
+
+```
+
+
+## Graph Interpretation
+
+The graph shows the average temperature of year 2014-2017 through month June to September. The blue line curve shows a smooth trend of the water temperature through the data. 
+
+During June to September, the water temperature gradually increased. For year 2014, 2016, 2017, there is a peak in August, followed by a small decline in water temperature moving towards the winter season. It’s evident that the increasing temperature throughout the June to August has a linear relationship with the water temperature. 
+
+
+### Analyzing correlation between water temperature and wave height
+
+We used a linear regression model to try to fit and find a some kind of correlation between water temperature and wave height.
+
+
+```{r}
+
+beach_lm = lm(wave_height~water_temp, data = beach1)
+cf = coef(beach_lm)
+slope = cf[2]
+intercept = cf[1]
+resid = residuals(beach_lm)
+summary(beach_lm)
+```
+
+### Graph 
+
+```{r}
+
+beach_line = beach1 %>% mutate(pred = (water_temp*slope) + intercept)  %>% mutate(resid = resid)
+
+beach_line %>% ggplot(aes(x = water_temp, y = wave_height)) +
+  geom_point() +
+  geom_abline(aes(slope = slope, intercept =intercept), color = "blue")+
+  xlab("water temperature") +
+  ylab("wave height") +
+  ggtitle("Correlation between water temperature and wave height")
+
+```
+
+### Interpretation
+
+This graph shows that the linear regression model has a weak and negative correlation. A lot of the points are far off from the predicted value from the line. Thus this shows the linear regression model fail to fit into the relationship between water temperature and wave height.
+
+### Residual Graph
+
+```{r}
+
+beach_line %>% ggplot(aes(x = water_temp, y = resid))+
+  geom_point() +
+  xlab("water temperature") +
+  ylab("Residuals") +
+  geom_hline(aes(yintercept=0), color="red", linetype = "dashed") +
+  ggtitle("Residual plot")
+  
+
+```
+
+### Interpretation
+
+From this residual plot, we could see that water temperature from 14 to 22 is usually over estimated, having a residual value larger than 0.1. The constant over estimation of this linear regression model shows that the estimation is off. 
+
+## Discussion 
+
+In this graph, we analyze the relationship between water temperature and water height. There is no observable pattern between the points - they seem to simply clump up at the most common temperatures and wave heights, with a few outliers here or there. The correlation coefficient of a graph of this nature would be close to zero, as there are no signs of the data following any sort of pattern or line. Further, because the data set is so large, a significant conclusion can be reached, because any outliers will have been properly factored in, allowing for a much smaller margin of error. As such, we can conclude that there is no observable trend between water temperature and wave height. A potential shortcoming of this data set could be the multisource variability problem. Because we’re collecting data from many different beaches, our models may not be conclusive, though this is unlikely as the data still remains extremely clumped without significant outliers. With this information arises the question: what is wave height affected by? Simply looking at the data set, it seems that wave height only has a direct correlation with wave period. We could confirm this by creating another scatterplot to search for any linear relationships between the two variables. In summation, because there is no observable linear relationship between water temperature and wave height, it's clear that no conclusion can be drawn about the data.
+
+
+## Correlation bewteen ater Temperature and Turbidity
+
+```{r}
+
+beach1 %>% ggplot(aes(x = water_temp, y = turbidity)) +
+  geom_point() +
+  ggtitle("Scatter plot of the turbidity and water temperature") +
+  xlab("Water temperature") +
+  ylab("Turbidity")
+
+```
+
+## Interpretation
+
+From this graph, we could see that the scale of turbidity seems to increase in a log scale. Thus we take the apply the log scale on it.
+
+
+
+```{r}
+
+beach1 %>% ggplot(aes(x = water_temp, y = turbidity)) +
+  geom_point() +
+  scale_y_log10() +
+  scale_x_log10() +
+  geom_vline(xintercept = c(16,20), color = "red", linetype = "dashed") +
+  xlab("Water temperature") +
+  ylab("Turbidity") +
+  ggtitle("Scatter plot of the turbidity and water temperature(log10 scale)")
+  
+
+```
+
+## Interpretation
+
+From this graph, we could see that by divided the graph into three segements. We could see that there is a possible correlation between water temperature and turbidity in the fisrt segement. Thus we filter out water temperature less than 16 to look closely at the first segment. 
+
+```{r}
+
+beach_mod = beach1 %>% filter(water_temp < 16)
+turb_lm = lm(log10(turbidity)~log10(water_temp), data = beach_mod)
+cf_turb = coef(turb_lm)
+slope_turb = cf_turb[2]
+intercept_turb = cf_turb[1]
+resid_turb = residuals(turb_lm)
+summary(turb_lm)
+
+```
+
+```{r}
+beach_mod %>% ggplot(aes(x = water_temp, y = turbidity)) +
+  geom_point() +
+  geom_abline(aes(slope = slope_turb, intercept =intercept_turb), color = "blue")+
+  xlab("Water temperature") +
+  ylab("Turbidity") +
+  ggtitle("Fitting Regression line in water temperature and turbidity")+
+  scale_y_log10() +
+  scale_x_log10() 
+
+```
+
+### Interpretation
+
+There is weak a positive correlation between water temperature and turbidity when water temperature is 12 to 16 degree. 
+
+```{r}
+
+beach_mod = beach_mod %>% mutate(resid = resid_turb)
+
+beach_mod %>% ggplot(aes(x = water_temp, y = resid))+
+  geom_point() +
+  xlab("water temperature") +
+  ylab("Residuals") +
+  geom_hline(aes(yintercept=0), color="red", linetype = "dashed") +
+  ggtitle("Residual plot")
+
+
+```
+
+
+### Interpretation
+
+From this residual plot, we could see that water temperature from 15 to 16 is usually over estimated, having a residual value larger than 0.5.Another thing we observed, is that the range of the residual is getting larger as the temperature gets larger. The regression model shows that the estimation is off. 
+
+## References 
+
+^[Primary Data Source: https://data.cityofchicago.org/d/qmqz-2xku, Secondary Data Source: https://data.world/cityofchicago/beach-water-quality-automated-sensors]
+
+
+
+

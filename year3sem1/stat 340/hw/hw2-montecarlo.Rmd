@@ -1,0 +1,247 @@
+---
+title: "Homework 2"
+output:
+  html_document: default
+  pdf_document: default
+editor_options:
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=T,eval=T,message=F,warning=F,fig.align='center')
+```
+
+
+## Problem 1 <small>(10pts)</small>
+
+According to a recent U.N. report, the warmest eight years on record have all been since 2015. That is, the years 2015, 2016, 2017, 2018, 2019, 2020, 2021, and 2022 were the eight warmest years (though not necessarily in that order) since record-keeping began circa 1850. Let's simplify things a bit, and suppose that records exist just for the past 12 years, with the first recorded temperature in 2011 and with 2022 being the last year.
+
+Suppose the average temperatures for the past 12 years were random with no trend. Then we would expect that any of the 12 years on record is equally likely to be the hottest on record, any of the remaining 11 years on record is equally likely to be the second hottest on record, etc. Use Monte Carlo to estimate the probability that, under this model in which all temperature orderings are equally likely, the eight warmest years on record all occurred in the last eight years 2015-2022.
+
+*Hints*:
+
+ - A completely equivalent question asks, if we order the numbers 1 to 10 completely at random, what is the probability that the numbers $\{1, 2, 3, 4, 5, 6, 7 \}$ appear in the first seven entries in the ordering?
+Bear in mind that this *does not* require that 1 appear first in the ordering, 2 second, etc., only that the first seven numbers appear in the first seven "entries" of our ordering.
+ - If `n` is a positive integer, `sample( n, n, replace=FALSE )` will give a random ordering of the numbers `1` through `n`  - Suppose you have an R vector `v` of length `n`, consisting of each the integers 1 through `n`, in some order. What is a good way to check that the numbers 1,2,3,4,5,6,7 all appear in the first seven elements of `v`? One (rather naive) approach would be to just check, for each $i \in \{ 1,2,3,4,5,6,7 \}$, that one of the first seven elements of `v` is equal to $i$, but this would be rather slow. Convince yourself that an equivalent approach is to check if the first seven elements of `v` sum to `sum(1:7)`.
+
+Use at least 10,000 Monte Carlo iterates to produce your estimate. If you take the hints above into account correctly, you should be able to run this many Monte Carlo iterates with little or no trouble. Otherwise, your experiment may require a few minutes to run. If things are taking an especially long time, feel free to reduce that 10,000 figure down to 1000.
+
+```{r}
+num_iters <- 10000
+
+total_years <- 12
+
+# cases where the eight warmest years are the last eight years
+count <- 0
+
+for (i in 1:num_iters) {
+  random_ordering <- sample(total_years, total_years, replace = FALSE)
+  
+  if (sum(random_ordering[1:8]) == sum(1:8)) {
+    count <- count + 1
+  }
+}
+
+probability <- count / num_iters
+
+probability
+```
+
+
+
+## Problem 2 <small>(10pts)</small>
+
+Let the following vector represent a deck of cards (for simplicity, we're ignoring suits (symbols) for now and only focusing on the ranks (numbers)).
+
+```{r}
+deck = rep(1:13,each=4)
+deck
+```
+
+Suppose you draw 5 cards. Using MC, estimate the probability of the following outcomes. Try to run as many iterations as you can comfortably run so you can get a better estimate of each. If you have run as many iterations as you can and you still do not observe a single occurrence of an event, you may state the probability as less than 1/M, where M is the number of iterations you used.
+
+1. A hand with all 5 cards having different ranks
+2. A hand with no cards that are 10 or higher
+3. A hand with two pairs (e.g. 3,3,7,7,9)
+4. A hand with a pair and a triple (e.g. 5,5,5,2,2)
+5. A hand with a four of a kind (e.g. 8,8,8,8,10)
+
+```{r}
+num_iters <- 10000
+
+count_1 <- 0
+count_2 <- 0
+count_3 <- 0
+count_4 <- 0
+count_5 <- 0
+
+for (i in 1:num_iters) {
+  hand <- sample(deck, 5, replace = FALSE)
+  
+  # hand 1
+  if (length(unique(hand)) == 5) {
+    count_1 <- count_1 + 1
+  }
+  
+  # hand 2
+  if (all(hand < 10)) {
+    count_2 <- count_2 + 1
+  }
+  
+  # hand 3
+  if (sum(table(hand) == 2) == 2) {
+    count_3 <- count_3 + 1
+  }
+  
+  # hand 4
+  if (sum(table(hand) == 2) == 1 && sum(table(hand) == 3) == 1) {
+    count_4 <- count_4 + 1
+  }
+  
+  # hand 5
+  if (sum(table(hand) == 4) == 1) {
+    count_5 <- count_5 + 1
+  }
+}
+
+if (count_1 == 0) probability_1 <- 1 / num_iters else probability_1 <- count_1 / num_iters
+if (count_2 == 0) probability_2 <- 1 / num_iters else probability_2 <- count_2 / num_iters
+if (count_3 == 0) probability_3 <- 1 / num_iters else probability_3 <- count_3 / num_iters
+if (count_4 == 0) probability_4 <- 1 / num_iters else probability_4 <- count_4 / num_iters
+if (count_5 == 0) probability_5 <- 1 / num_iters else probability_5 <- count_5 / num_iters
+
+
+print(probability_1)
+print(probability_2)
+print(probability_3)
+print(probability_4)
+print(probability_5)
+```
+
+## Problem 3: Permutation testing <small>(10pts)</small>
+
+Below are data arising from a (fictionalized) data source: the number of defects per day on an assembly line before and after installation of a new torque converter (this is a totally fictional "part" of an assembly line--just treat these as "control" and "treatment" groups, respectively).
+
+```{r}
+before = c(4,5,6,3,6,3,4,5,5,3,4,6,4,6,3,4,2,2,0,7,5,8,4,5,1,4,4,8,2,3)
+after  = c(3,2,4,3,7,5,5,2,2,4,5,2,2,6,1,5,6,3,2,3,7,3,4,5,4,2,2,6,7,8)
+
+# test statistic
+obs_diff <- mean(after) - mean(before)
+
+num_permutations <- 10000
+
+perm_results <- numeric(num_permutations)
+
+# Permutation test
+for (i in 1:num_permutations) {
+  combined_data <- c(before, after)
+  
+  permuted_data <- sample(combined_data, length(combined_data), replace = FALSE)
+  
+  perm_diff <- mean(permuted_data[1:length(before)]) - mean(permuted_data[(length(before) + 1):length(combined_data)])
+
+  perm_results[i] <- perm_diff
+}
+
+p_value <- sum(abs(perm_results) >= abs(obs_diff)) / num_permutations
+
+# Interpretation
+cat("p-value: ", p_value, "\n")
+if (p_value < 0.05) {
+  cat("null hypothesis is rejected\n")
+} else {
+  cat("null hypothesis stands\n")
+}
+
+```
+
+a) Use a permutation test to assess the claim that installation of the new part changed the prevalence of defects. That is, test the null hypothesis that the distribution of defects is the same before and after installation of the new part. Produce a p-value and interpret the results of your test in context.
+
+b) Explain, briefly, what you did above and why. Imagine that you are trying to explain to someone who isn't well versed in statistics what exactly you are doing in a permutation test. Explain your conclusion based on your test above. Three to five sentences should be plenty, but you are free to write as much or as little as you think is necessary to clearly explain your findings.
+
+
+## Problem 4: Memes <small>(10pts)</small>
+
+The following question comes from Karl Rohe, who developed the very first version of this class. This question has been reproduced in nearly the exact original (very amusing) wording.
+
+> **Memes, part 1** (Please forgive me. I drank too much coffee before writing this question.)
+> 
+> In class thus far, there have been 416 comments posted in the bbcollaborate chat during class. An expert panel has judged 47 of these comments to be memes. The big-bad-deans say that they are concerned "if there is evidence that more than 10% of comments are memes." So, this looks like bad news, 47/416>10%.
+> 
+> Karl pleads with the deans: "Please, oh please, you big-bad-deans... Memeing is totally random." (I don't actually know what this notion of "random" means, but please just run with it for this question.) Then, along comes you, a trusty and dedicated 340 student. You say that "because we have only observed 416 comments, we don't really know what the 'true proportion' of memes."
+> 
+> 4a: What would be a good distribution for the number of memes?
+> 
+> 4b: Using your distribution from 4a, test the null hypothesis that the 'true proportion' is actually 10%. It's all up to you now... report the p-value.
+
+Hints:
+
+- For 4a, there should be a (hopefully) fairly intuitive choice of random variable that makes sense here. Look at your list of random variables and ask yourself which of these makes the most sense.
+
+```{r}
+cat("This is a binomial random variable because we are counting the number of successes (memes) within a set number of trials (comments)\n")
+```
+- For 4b, you can use the built-in function in R to simulate observations according to your null. Remember that you **always simulate *assuming* the null hypothesis**. Make sure your choice of the necessary parameter(s) reflects this assumption.
+
+```{r}
+# Observed data
+total_comments <- 416
+observed_memes <- 47
+
+p_null <- 0.10
+
+simulated_memes <- rbinom(10000, total_comments, p_null)
+
+p_value <- sum(simulated_memes >= observed_memes) / length(simulated_memes)
+
+print(p_value)
+
+```
+
+## Problem 5: Testing coin flips <small>(10 pts)</small>
+
+In the six sequences below, only one of them is actually **randomly generated from independent flips of a fair coin**. Use a combination of everything you know (common sense, Monte Carlo, hypothesis testing, etc.) to identify which is actually random and explain your reasoning.
+
+(For full points, conduct a formal test and report a p-value for each sequence. You may use a combination of multiple tests to arrive at your answer. If you cannot compute a p-value for each sequence, you can still earn a significant amount of partial credit by carefully explaining your reasoning and response as best as you can.)
+
+My advice is **be creative** with the test statistics you come up with to eliminate each sequence! Think of some way of summarizing a sequence of flips that might be useful for comparing against a simulated sequence of random flips. After you come up with an idea for a statistic, remember to run it on many MC generated completely random flips to produce a distribution under the null, which you can then compare with your data to get a p-value. Also, be careful of now you define "more extreme" than the data.
+
+(2 bonus points available if you can find a single test that is powerful enough to reject all the fake sequences together in one step. Yes, at least one such possible test exists.)
+
+```{r}
+
+compute_chi_squared_p_value <- function(sequence) {
+  observed_counts <- table(sequence)
+  expected_counts <- rep(length(sequence) / 2, 2)
+  chi_squared <- sum((observed_counts - expected_counts)^2 / expected_counts)
+  p_value <- 1 - pchisq(chi_squared, df = 1)
+  return(p_value)
+}
+
+# Define the sequences
+flips1 <- "HTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHTHT"
+flips2 <- "HHHTHTTTHHTHHTHHHTTTTHTHTHHTTHTHHHTHHTHTTTHTHHHTHTTTHTHTHHTHTHTTHTHHTHTHTTTHTHHHTHTHTTHTHTHHTHTHTHHHTHTTTHTHHTHTHTHHTTTHTHHTHHTTTTHTHTHHHTHTTHTHHTHTHTTHTHHTHTHHHTHHHTHTTTHTHHTTTHTHHHTHTHTTHTHHTHHTHTTT"
+flips3 <- "HHTHTHTTTHTHHHTHHTTTHTHHTHTTTHTHTHHTHTHTTHTHHHHHHTTTHTHTHHTHTTTHTHHTHTHTTTHTHHHTTHTTTHTHTHHHHTHTTHHTTTTTHTHHHTHTHTTTTTHHHTHHTHHTHHHTTTTHTHTHHHTHHTTTTTHTHHHTHTHTHTTTHTHHHTHTHTHTTHTHHTHTHTHTTTTHTHHHTHTH"
+flips4 <- "HTHHHHHHHTHTTHHTTHHHTHTHTTTHHTHHHTHHTTHTTTTTTTTTHTHHTTTTTHTHTHTHHTTHTTHTTTTTHHHTHTTTHTHTHHHTHTTTTHTHTHHTTHTHTTHHTHTHHHHTHTTHHTTHTTHTTHTHHHHHHTTTTTTHHHTTHTHHHHTTTHTTHHHTTHTHHTTTHHTHHTTTHTHHTHHHTHHTTHHH"
+flips5 <- "HHHHHHHHHHTTTTTTTTTTHHHHHHHHHHTTTTTTTTTTHHHHHHHHHHTTTTTTTTTTHHHHHHHHHHTTTTTTTTTTHHHHHHHHHHTTTTTTTTTTHHHHHHHHHHTTTTTTTTTTHHHHHHHHHHTTTTTTTTTTHHHHHHHHHHTTTTTTTTTTHHHHHHHHHHTTTTTTTTTTHHHHHHHHHHTTTTTTTTT"
+flips6 <- "TTHTTTHTTTTTTTHTHTHTHTTHTTHTHHTHHTTTHHTHTTTHTHHTHHHTHTTHHTHHTTHTHTTTTHTHTTTHHTTTTTTTTHTHHTTHTTTTTTHTHTHTHTTTHTTHHTTHTTTHHTTTHTTHTTTTHTTTTHHTTTHTHTHHHTTTTTTHTHHTTTTTTTTTTTTHHHTTTHHHTTTHTTTHTHTTHTTTTTHT"
+
+# p-values for each sequence
+p_value1 <- compute_chi_squared_p_value(unlist(strsplit(flips1, "")))
+p_value2 <- compute_chi_squared_p_value(unlist(strsplit(flips2, "")))
+p_value3 <- compute_chi_squared_p_value(unlist(strsplit(flips3, "")))
+p_value4 <- compute_chi_squared_p_value(unlist(strsplit(flips4, "")))
+p_value5 <- compute_chi_squared_p_value(unlist(strsplit(flips5, "")))
+p_value6 <- compute_chi_squared_p_value(unlist(strsplit(flips6, "")))
+
+cat("P-value for flips1:", p_value1, "\n")
+cat("P-value for flips2:", p_value2, "\n")
+cat("P-value for flips3:", p_value3, "\n")
+cat("P-value for flips4:", p_value4, "\n")
+cat("P-value for flips5:", p_value5, "\n")
+cat("P-value for flips6:", p_value6, "\n")
+
+print("Therefore flips6 is the one that's most likely to be the randomized one, because it has the lowest p-value.")
+```
+

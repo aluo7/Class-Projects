@@ -1,0 +1,249 @@
+---
+title: "STAT 340 Discussion 01: R review"
+output: html_document
+author: "Alan Luo"
+---
+
+## XKCD comic
+
+We like to start discussion sections with a relevant XKCD comic (see
+[XKCD.com](xkcd.com) for lots more).
+
+<center><a href="https://xkcd.com/833/"><img id="comic" src="https://imgs.xkcd.com/comics/convincing.png" title="" style="width:555px;"></a></center>
+
+Today's exercises are intended as a review of basic R features and operations.
+
+## 1) Vector operations
+
+Remember that in R, if an operation works on a single number, it will usually
+also work entry-wise on a vector. For example, if you multiply a number by a
+vector, each entry in the vector will be multiplied by that number. If you
+multiply two vectors of the same length, the first number of both vectors will
+be multiplied, and the second number of both vectors will be multiplied, etc. A
+similar pattern will also work for functions like `exp()` or `pnorm()`. Applying
+a function like these to a vector will apply the function to every entry of the
+vector. Functions that do this are called *vectorized*.
+
+   a. Create a vector of the numbers 1 to 25 (try to do this without writing out each individual number). Multiply the vector by 2 to get a vector of all the even numbers less than or equal to 50.
+   b. Next, square this vector. Check that the entries of the result are the squares of the first 25 positive even numbers.
+   c. Find the mean of this vector and subtract it from each element of the vector.
+   d. Using `>=`, compare this vector with 0 to show if each number is greater than or equal to 0. Use `sum()` on this resultant vector to count how many numbers satisfy this criterion. Alternatively, use `mean()` to get the proportion (think about why this works!).
+   e. Divide the interval $(0,1)$ into 15 evenly spaced numbers (**not including** 0 and 1). (Hint: see `?ppoints`). Then, use `qnorm()` to get a vector of 15 points evenly spaced out along the quantiles of the normal distribution. __Note:__ this is how you obtain the theoreticals for a [QQ-plot](https://en.wikipedia.org/wiki/Q%E2%80%93Q_plot), which you may have seen in your intro classes.
+   
+```{r}
+# a
+v <- 1:25
+v_even <- v * 2
+
+# b
+v_squared <- v * v
+
+# c
+mean = mean(v)
+v_sub <- v - mean
+
+# d
+greater_than <- v_sub >= 0
+
+count_greater_than <- sum(greater_than)
+prop_greater_than <- mean(greater_than)
+
+# e
+points <- ppoints(15)
+
+quantiles <- qnorm(points)
+```
+
+## 2) Functions
+
+Functions are a useful way of creating a tool that can be used over and over
+again. Write a function for each of the following parts:
+
+1. Given an `n` and `k`, computes the binomial coefficient,
+
+$$\binom{n}{k} = \frac{ n! }{ (n-k)! k! }.$$
+You may assume that `n` and `k` are both integers and that $0 \le k \le n$.
+You may find the `factorial` function in R helpful. See `?factorial` for more information. Be careful that your function correctly handles cases like when $n=0$.
+
+**Note:** functions in R have different scope than the global environment. Read
+[this](https://www.geeksforgeeks.org/scope-of-variable-in-r/) for a helpful
+guide about this. Also note that declaring/updating a global variable from
+inside a function is considered bad practice, since it can easily introduce bugs
+that are very difficult to detect and fix. Avoid this if you can.
+
+2. Simulates rolling `n` 6-sided dice and gives the average of the outcomes. `n` should have a default value of 2.
+3. Manually (i.e. without using `sd()`) compute the sample standard deviation of a vector. Make sure you don't call this function `sd`-- pick something else!
+
+```{r}
+# 1
+binomial_coefficient <- function(n, k) {
+  if (n == 0 || k == 0 || n == k) {
+    return(1)
+  }
+  
+  return(factorial(n) / (factorial(n - k) * factorial(k)))
+}
+
+# 2
+roll_dice_average <- function(n = 2) {
+  if(n < 1) {
+    stop("Number of dice must be at least 1.")
+  }
+  
+  outcomes <- sample(1:6, n, replace = TRUE)
+  return(mean(outcomes))
+}
+
+# 3
+standard_deviation <- function(data) {
+  n <- length(data)
+  if (n <= 1) {
+    stop("Sample size must be greater than 1.")
+  }
+  
+  return(sqrt(sum((data - mean(data))^2) / (n - 1)))
+}
+```
+
+## 3) Conditional executions
+
+It's important to be able to write clear and effective conditionals (if, else,
+etc...) in R. It's often very useful to check if a condition is satisfied and
+then do different things depending on the outcome.
+
+Briefly review sections 7.3-7.5 of [this
+page](https://discdown.org/rprogramming/conditional-execution.html#conditional-execution-if-else-statement)
+here. Then, write a function `is_even` (remember that thing about good function
+names?) that takes a single argument `n` (you may assume `n` is an integer), and
+returns `TRUE` if `n` is even and `FALSE` otherwise. **Hint:** `x %% y`, read "x
+modulo y", returns the remainder when dividing `x` by `y`. This is an easy way
+to check if a number is odd or even: a number $n$ is even if and only if n
+modulo 2 is zero.
+
+```{r}
+is_even <- function(n) {
+  if (n %% 2 == 0) {
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
+}
+```
+
+## 4) For-loops
+
+For-loops are a useful way of repeating a step a set number of times.
+See [here](https://discdown.org/rprogramming/loops.html#for-loops) for a review.
+
+Write a function that repeats the following experiment `n` times (`n` should be the only argument to your function, and you may assume that `n` is a positive integer), with a default `n=1000`:
+
+   - draw 5 cards from a standard deck of playing cards (hint: for this problem, you can represent a deck as the vector 1,2,...,13 repeated 4 times)
+   - drop the lowest and highest card (if there are ties, just drop one of
+   the cards that are tied).
+   - take the mean of the remaining three numbers and stores them in a vector
+   - return the vector of means observed in the `n` repetitions of this experiment.
+   That is, you should be returning a vector of length `n`.
+
+```{r}
+deck <- rep(1:13, times = 4)
+
+experiment <- function(n = 1000) {
+  for (i in 1:n) {
+    sampled_cards <- sort(sample(deck, size = 5))
+    
+    sorted_cards <- sorted_cards[-c(1, 5)]
+    
+    mean <- mean(sorted_cards)
+    
+    means[i] <- mean
+  }
+
+  return(means)
+}
+```
+
+## 5) Random variables and LLN
+
+#### 5a)
+
+For each of the following, identify one or more random variables that can be used to model the outcome.
+
+   - The number of cars that pass your house in an hour.
+   - The number of times you need to try before you make a 3-point shot.
+   - The number of people in a clinical trial who recover after going through an experimental treatment.
+   - The number you get when rolling a 20-sided die.
+
+***
+
+- poisson
+- geometric
+- binomial
+- discrete uniform
+
+***
+   
+#### 5b)
+
+Choose a type of random variable from lecture (e.g., normal, binomial, poisson, geometric, exponential, uniform, etc...) and choose some parameters. Write down what the theoretical mean of this particular distribution is (you can use Wikipedia to get the expected value for your random variable if you don't know it off-hand).
+
+***
+
+Geometric:
+- has a parameter, p, which denotes the probability of success on each trial
+- theoretical mean: 1 / p
+
+***
+
+#### 5c)
+
+Randomly generate at least 1000 observations of the variable you chose (if your
+computer can generate more, go ahead!). Then, use the `running_mean()` function
+defined below to compute a running mean (i.e., the $k$-th entry of the output is
+the mean of the first $k$ numbers in the input).
+
+```{r}
+# define running average function
+# can be specified as cumulative sum / index of element
+running_mean <- function(vec) {
+   cumsum(vec) / seq_along(vec)
+}
+```
+   
+```{r}
+library(ggplot2)
+
+p <- 0.2
+geometric_data <- rgeom(25000, prob = p)
+
+running_means <- running_mean(geometric_data)
+
+```
+   
+Plot this running mean using the `plot()` function, and use `abline()` to add a
+horizontal red line at your previously-computed theoretical mean. If you like,
+you can use `ggplot2` for this, instead.
+
+```{r}
+ggplot(data.frame(x = 1:length(running_means), y = running_means), aes(x, y)) +
+  geom_line() +
+  geom_abline(intercept = 1/p, slope = 0, color = "red", linetype = "dashed") +
+  labs(x = "Number of Observations", y = "Running Mean") +
+  theme_minimal() +
+  ylim(c(2, 6)) +
+  ggtitle("idk why it approaches 4")
+
+summary(running_means)
+```
+
+The law of large numbers (LLN) states that the sample mean of a large number of
+random variables will be close to the population mean (i.e., the expectation),
+and the sample mean will be closer to the population mean (on average) the
+larger the sample size is.
+
+Is your plot consistent with the Law of Large Numbers? Why or why not?
+
+***
+
+it should be but it's not. ideally, as the number of observations goes up, the running mean gets closer to 4
+
+***
