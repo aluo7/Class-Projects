@@ -1,0 +1,12 @@
+[submodule "y1sem1"]
+	path = y1sem1
+	url = git@github.com:aluo7/y1sem1.git
+[submodule "y2sem2"]
+	path = y1sem2
+	url = git@github.com:aluo7/y1sem2.git
+[submodule "y2sem1"]
+	path = y2sem1
+	url = git@github.com:aluo7/y2sem1.git
+[submodule "y1sem2"]
+	path = y1sem2
+	url = git@github.com:aluo7/y1sem2.git
