@@ -42,20 +42,13 @@ class ConvModel(nn.Module):
         # TO DO: Convert input (x) into shape (N, C*KH*KW, out_h*out_w). 
         # Refer to Lecture 3 for implementing this operation.
 
-        H = x_pad.size(2)
-        W = x_pad.size(3)
-        
-        patches = torch.zeros(N, C*KH*KW, out_h*out_w, device=x.device)
-        
-        for n in range(N):
-            for h in range(self.out_h):
-                for w in range(self.out_w):
-                    col_idx = h * out_w + w
-                    for c in range(C):
-                        for kh in range(KH):
-                            for kw in range(KW):
-                                row_idx = c * (KH * KW) + kh * KW + kw
-                                patches[n][row_idx][col_idx] = x_pad[n][c][h+kh][w+kw]
+        strides = x_pad.stride()
+        patches = torch.as_strided(x_pad, size=(N, C, out_h, out_w, KH, KW),
+                                stride=(strides[0], strides[1], strides[2] * S, strides[3] * S, strides[2], strides[3]))
+
+        # Reshape and permute to target shape (N, C*KH*KW, out_h*out_w)
+        patches = patches.permute(0, 1, 4, 5, 2, 3)
+        patches = patches.contiguous().view(N, C * KH * KW, out_h * out_w)
 
         return patches
 
@@ -88,10 +81,10 @@ class ConvModel(nn.Module):
 if __name__ == "__main__":
     torch.manual_seed(0)
     N, C, H, W = 2, 4, 22, 22
-    x = torch.randn(N, C, H, W).to('cuda')
+    x = torch.randn(N, C, H, W, dtype=torch.float64).to('cuda')
     out_channels=8
     kernel_size=7
-    model = ConvModel(H, W, C, out_channels, kernel_size, stride=1, padding=1).to('cuda')
+    model = ConvModel(H, W, C, out_channels, kernel_size, stride=1, padding=1).to('cuda', dtype=torch.float64)
 
     with profile(
         activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
@@ -101,7 +94,7 @@ if __name__ == "__main__":
         with record_function("manual_conv_eager"):
             out = model(x)
 
-    # prof.export_chrome_trace("./trace/trace_eager.json")
+    prof.export_chrome_trace("./trace/trace_eager.json")
 
     # Test your solution
     conv_ref = F.conv2d(x, model.weight, model.bias, stride=1, padding=1)

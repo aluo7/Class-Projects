@@ -5,7 +5,7 @@ import torch.nn.functional as F
 import numpy as np
 import torch
 from myconv import ConvModel
-import jax.profiler
+import torch.profiler import profile, record_function, ProfilerActivity
 
 # Create a log directory
 logdir = "./jax_trace"
@@ -24,36 +24,20 @@ def im2col_manual_jax(x, KH, KW, S, P, out_h, out_w):
     # TO DO: Convert input (x) into shape (N, out_h*out_w, C*KH*KW). 
     # Refer to Lecture 3 for implementing this operation.
 
-    patches_list = []
+    y_starts = jnp.arange(out_h) * S
+    x_starts = jnp.arange(out_w) * S
 
-    row_idx = jnp.arange(out_h) * S
-    col_idx = jnp.arange(out_w) * S
+    k_y_offsets = jnp.arange(KH)
+    k_x_offsets = jnp.arange(KW)
 
-    i = jnp.arange(out_h)
-    j = jnp.arange(out_w)
-
-    rows = i * S
-    cols = j * S
-
-    kh_range = jnp.arange(KH)
-    kw_range = jnp.arange(KW)
-
-    patches_tensor = jnp.array([
-        [
-            x_pad[n, c, rows[h_idx]:rows[h_idx]+KH, cols[w_idx]:cols[w_idx]+KW]
-            for w_idx in range(out_w)
-        ]
-        for h_idx in range(out_h)
-        for c in range(C)
-        for n in range(N)
-    ])
-
-    patches_tensor = patches_tensor.reshape(N, out_h, out_w, C, KH, KW)
+    y_indices = y_starts[:, None, None, None] + k_y_offsets[None, None, :, None]
+    x_indices = x_starts[None, :, None, None] + k_x_offsets[None, None, None, :]
     
-    patches_tensor = patches_tensor.transpose((0, 3, 4, 5, 1, 2))
-    patches = patches_tensor.reshape((N, C * KH * KW, out_h * out_w))
-    
-    return patches
+    patches = x_pad[:, :, y_indices, x_indices]
+
+    patches = patches.transpose(0, 1, 4, 5, 2, 3)
+
+    return patches.reshape(N, C * KH * KW, out_h * out_w)
 
 def conv2d_manual_jax(x, weight, bias, stride=1, padding=1):
     '''
@@ -112,9 +96,16 @@ if __name__ == "__main__":
 
     # call your JAX function
     _ = conv2d_manual_jax_jit(x_jax, weight_jax, bias_jax)
-    out_jax = conv2d_manual_jax_jit(x_jax, weight_jax, bias_jax)
 
-    jax.profiler.stop_trace()
+    with profile(
+        activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
+        record_shapes=True,
+        profile_memory=True
+    ) as prof:
+        with record_function("manual_conv_jax"):
+            out_jax = torch.from_numpy(np.array(conv2d_manual_jax_jit(x_jax, weight_jax, bias_jax)))
+
+    prof.export_chrome_trace("./trace/trace_jax.json")
 
     # Test your solution
     conv_ref = F.conv2d(x_torch, model.weight, model.bias, stride=1, padding=1)
