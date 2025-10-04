@@ -7,9 +7,6 @@ import torch
 from myconv import ConvModel
 from torch.profiler import profile, record_function, ProfilerActivity
 
-# Create a log directory
-logdir = "./jax_trace"
-
 def im2col_manual_jax(x, KH, KW, S, P, out_h, out_w):
     ''' 
         Reimplement the same function (im2col_manual) in myconv.py "for JAX". 
@@ -85,9 +82,9 @@ if __name__ == "__main__":
     }
 
     # Convert model input, weights and bias into jax arrays
-    x_jax = jnp.array(x_torch.numpy())
-    weight_jax = jnp.array(params["weight"])
-    bias_jax = jnp.array(params["bias"])
+    x = jnp.array(x_torch.numpy())
+    weight = jnp.array(params["weight"])
+    bias = jnp.array(params["bias"])
 
     # enable JIT compilation
     conv2d_manual_jax_jit = jit(conv2d_manual_jax)
@@ -95,7 +92,7 @@ if __name__ == "__main__":
     jax.profiler.start_trace("./trace/jax_trace")
 
     # call your JAX function
-    _ = conv2d_manual_jax_jit(x_jax, weight_jax, bias_jax)
+    _ = conv2d_manual_jax_jit(x, weight, bias)
 
     with profile(
         activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
@@ -103,11 +100,11 @@ if __name__ == "__main__":
         profile_memory=True
     ) as prof:
         with record_function("manual_conv_jax"):
-            out_jax = torch.from_numpy(np.array(conv2d_manual_jax_jit(x_jax, weight_jax, bias_jax)))
+            out = torch.from_numpy(np.array(conv2d_manual_jax_jit(x, weight, bias)))
 
     prof.export_chrome_trace("./trace/trace_jax.json")
 
     # Test your solution
     conv_ref = F.conv2d(x_torch, model.weight, model.bias, stride=1, padding=1)
-    print("JAX --- shape check:", out_jax.shape == conv_ref.shape)
-    print("JAX --- correctness check:", torch.allclose(out_jax, conv_ref, atol=1e-1))
+    print("JAX --- shape check:", out.shape == conv_ref.shape)
+    print("JAX --- correctness check:", torch.allclose(out, conv_ref, atol=1e-1))
