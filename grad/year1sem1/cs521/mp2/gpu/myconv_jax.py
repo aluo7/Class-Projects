@@ -5,7 +5,7 @@ import torch.nn.functional as F
 import numpy as np
 import torch
 from myconv import ConvModel
-import torch.profiler import profile, record_function, ProfilerActivity
+from torch.profiler import profile, record_function, ProfilerActivity
 
 # Create a log directory
 logdir = "./jax_trace"
