@@ -63,84 +63,94 @@ def conv2d(X, W, bias):
     )
 
     # Various tiling dimensions (You may want to define more of them)
-    d_c_out = nl.tile_size.pmax
-    n_tiles_c_out = out_channels // d_c_out
-    d_c_in = nl.tile_size.pmax
-    n_tiles_c_in = in_channels // d_c_in
-    
-    # Height tiling
-    d_ho = nl.tile_size.gemm_moving_fmax // out_width
-    d_ho = max(min(d_ho, out_height), 1)
-    n_tiles_ho = (out_height + d_ho - 1) // d_ho
-    
-    # Pre-transpose weights
-    W_reshaped = W.reshape((n_tiles_c_out, d_c_out, n_tiles_c_in, d_c_in, filter_height, filter_width))
-    weight_sbuf = nl.ndarray((n_tiles_c_out, nl.par_dim(d_c_out), n_tiles_c_in, d_c_in, filter_height, filter_width), dtype=W.dtype, buffer=nl.sbuf)
-    
-    for k in nl.affine_range(n_tiles_c_out):
-        weight_sbuf[k] = nl.load(W_reshaped[k])
-    
-    weight_copy = nl.ndarray((filter_height, filter_width, n_tiles_c_out, n_tiles_c_in, nl.par_dim(d_c_out), d_c_in), dtype=W.dtype, buffer=nl.sbuf)
-    w_transposed = nl.ndarray((filter_height, filter_width, n_tiles_c_out, n_tiles_c_in, nl.par_dim(d_c_in), d_c_out), dtype=W.dtype, buffer=nl.sbuf)
-    
-    for k in nl.affine_range(n_tiles_c_out):
-        for c in nl.affine_range(n_tiles_c_in):
-            for r in nl.affine_range(filter_height):
-                for s in nl.affine_range(filter_width):
-                    weight_copy[r, s, k, c, :, :] = nl.copy(weight_sbuf[k, :, c, :, r, s])
-                    w_transposed[r, s, k, c] = nisa.nc_transpose(weight_copy[r, s, k, c])
-    
-    for b in nl.affine_range(batch_size):
-        for tile_ho in nl.affine_range(n_tiles_ho):
-            ho_start = tile_ho * d_ho
-            cur_ho = min(d_ho, out_height - ho_start)
-            
-            for tile_c_out in nl.affine_range(n_tiles_c_out):
-                c_out_start = tile_c_out * d_c_out
-                
-                output_tile_psum = nl.ndarray((d_c_out, d_ho * out_width), dtype=nl.float32, buffer=nl.psum)
-                output_tile_psum[:] = 0
-                
-                hi_start = ho_start
-                hi_end = ho_start + d_ho + filter_height - 1
-                hi_load_end = min(hi_end, input_height)
-                load_height = hi_load_end - hi_start
-                
-                for tile_c_in in nl.affine_range(n_tiles_c_in):
-                    c_in_start = tile_c_in * d_c_in
-                    
-                    input_patch_sbuf = nl.ndarray((nl.par_dim(d_c_in), d_ho + filter_height - 1, input_width), dtype=X.dtype, buffer=nl.sbuf)
-                    input_patch_sbuf[:] = 0.0
-                    
-                    input_loaded = nl.load(X[b, c_in_start:c_in_start + d_c_in, hi_start:hi_load_end, :])
-                    input_patch_sbuf[:, 0:load_height, :] = nl.copy(input_loaded)
-                    
+    c_in_pmax = nl.tile_size.pmax
+    n_tiles_c_in = in_channels // c_in_pmax
+
+    out_tile_h = int(min(nl.tile_size.gemm_moving_fmax // out_width, out_height))  # output tile height
+    out_tile_h = 1 if out_tile_h <= 0 else out_tile_h
+    out_tile_w = out_width  # output tile width
+    num_out_tiles_h = (out_height + out_tile_h - 1) // out_tile_h  # num tiles along output height
+    out_tile_ch = nl.tile_size.pmax  # output tile channels
+    num_out_tiles_ch = out_channels // out_tile_ch  # num tiles along output channels
+
+    # buffer for final reordered weights
+    w_sbuf = nl.ndarray(
+        (filter_height, filter_width, num_out_tiles_ch, n_tiles_c_in, nl.par_dim(c_in_pmax), out_tile_ch),
+        dtype=W.dtype,
+        buffer=nl.sbuf
+    )
+
+    # temporary buffer for loading weight tiles
+    w_sbuf_tmp = nl.ndarray(
+        (nl.par_dim(out_tile_ch), n_tiles_c_in, c_in_pmax, filter_height, filter_width),
+        dtype=W.dtype,
+        buffer=nl.sbuf
+    )
+
+    # reshape for tiling
+    W = W.reshape((num_out_tiles_ch, out_tile_ch, n_tiles_c_in, c_in_pmax, filter_height, filter_width))
+
+    # load transposed weights into buffer
+    for tile_k in nl.sequential_range(num_out_tiles_ch):
+        w_sbuf_tmp[...] = nl.load(W[tile_k])
+
+        for tile_c in nl.affine_range(n_tiles_c_in):
+            for fh in nl.affine_range(filter_height):
+                for fw in nl.affine_range(filter_width):
+                    w_sbuf[fh, fw, tile_k, tile_c] = nisa.nc_transpose(
+                        w_sbuf_tmp[:, tile_c, :, fh, fw]
+                    )
+
+    # main conv loop
+    for batch_idx in nl.affine_range(batch_size):
+        for tile_oh_idx in nl.affine_range(num_out_tiles_h):
+            for tile_k_idx in nl.affine_range(num_out_tiles_ch):
+
+                acc_tile = nl.zeros(
+                    (out_tile_ch, out_tile_h * out_tile_w),
+                    dtype=nl.float32,
+                    buffer=nl.psum
+                )
+
+                bias_tile = nl.load(bias[tile_k_idx * out_tile_ch:(tile_k_idx + 1) * out_tile_ch])
+
+                for tile_c_idx in nl.affine_range(n_tiles_c_in):
+                    ih_start = tile_oh_idx * out_tile_h
+                    ih_end = (tile_oh_idx + 1) * out_tile_h + 2 * (filter_height // 2)
+
+                    x_tile = nl.load(
+                        X[
+                            batch_idx,
+                            tile_c_idx * c_in_pmax:(tile_c_idx + 1) * c_in_pmax,
+                            ih_start:ih_end,
+                            :
+                        ]
+                    )
+
                     for fh in nl.affine_range(filter_height):
                         for fw in nl.affine_range(filter_width):
-                            input_tile_3d = input_patch_sbuf[:, fh:fh + d_ho, fw:fw + out_width]
-                            
-                            # Manual reshape: [d_c_in, d_ho, out_width] -> [d_c_in, d_ho * out_width]
-                            input_tile_2d = nl.ndarray((d_c_in, d_ho * out_width), dtype=X.dtype, buffer=nl.sbuf)
-                            for h_idx in nl.affine_range(d_ho):
-                                input_tile_2d[:, h_idx*out_width:(h_idx+1)*out_width] = input_tile_3d[:, h_idx, :]
-                            
-                            weight_tile_2d = w_transposed[fh, fw, tile_c_out, tile_c_in]
-                            
-                            output_tile_psum += nl.matmul(weight_tile_2d, input_tile_2d, transpose_x=True)
-                
-                bias_tile = nl.load(bias[c_out_start : c_out_start + d_c_out])
-                
-                valid_length = cur_ho * out_width
-                valid_psum = output_tile_psum[:, 0:valid_length]
-                valid_psum = valid_psum + bias_tile.reshape((d_c_out, 1))
-                
-                output_tile_sbuf = nl.copy(valid_psum)
-                
-                # Manual reshape: [d_c_out, cur_ho * out_width] -> [d_c_out, cur_ho, out_width]
-                output_tile_3d = nl.ndarray((d_c_out, cur_ho, out_width), dtype=X.dtype, buffer=nl.sbuf)
-                for h_idx in nl.affine_range(cur_ho):
-                    output_tile_3d[:, h_idx, :] = output_tile_sbuf[:, h_idx*out_width:(h_idx+1)*out_width]
-                
-                nl.store(X_out[b, c_out_start:c_out_start + d_c_out, ho_start:ho_start + cur_ho, :], value=output_tile_3d)
-    
+                            x_window = nl.copy(
+                                x_tile[:, fh:fh + out_tile_h, fw:fw + out_tile_w]
+                            ).reshape((c_in_pmax, out_tile_h * out_tile_w))
+
+                            acc_tile += nl.matmul(
+                                w_sbuf[fh, fw, tile_k_idx, tile_c_idx],
+                                x_window,
+                                transpose_x=True
+                            )
+
+                # add bias and write output
+                out_tile = acc_tile + bias_tile
+                out_tile = out_tile.reshape((out_tile_ch, out_tile_h, out_tile_w))
+
+                nl.store(
+                    X_out[
+                        batch_idx,
+                        tile_k_idx * out_tile_ch:(tile_k_idx + 1) * out_tile_ch,
+                        tile_oh_idx * out_tile_h:(tile_oh_idx + 1) * out_tile_h,
+                        :
+                    ],
+                    out_tile
+                )
+
     return X_out
