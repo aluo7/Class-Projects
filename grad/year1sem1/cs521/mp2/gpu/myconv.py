@@ -80,11 +80,30 @@ class ConvModel(nn.Module):
 
 if __name__ == "__main__":
     torch.manual_seed(0)
-    N, C, H, W = 2, 4, 22, 22
+
+    # trial 1: 62.6236 ms
+    N, C, H, W = 8, 32, 128, 128
+    out_channels = 64
+    kernel_size = 3
+    stride = 1
+    padding = 1
+
+    # trial 2: 73.455245 ms
+    # N, C, H, W = 16, 64, 128, 128
+    # out_channels = 128
+    # kernel_size = 3
+    # stride = 1
+    # padding = 1
+
+    # trial 3: 984.261253 ms
+    # N, C, H, W = 16, 128, 256, 256
+    # out_channels = 128
+    # kernel_size = 5
+    # stride = 1
+    # padding = 2
+
     x = torch.randn(N, C, H, W, dtype=torch.float64).to('cuda')
-    out_channels=8
-    kernel_size=7
-    model = ConvModel(H, W, C, out_channels, kernel_size, stride=1, padding=1).to('cuda', dtype=torch.float64)
+    model = ConvModel(H, W, C, out_channels, kernel_size, stride=stride, padding=padding).to('cuda', dtype=torch.float64)
 
     with profile(
         activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
@@ -97,6 +116,6 @@ if __name__ == "__main__":
     prof.export_chrome_trace("./trace/trace_eager.json")
 
     # Test your solution
-    conv_ref = F.conv2d(x, model.weight, model.bias, stride=1, padding=1)
+    conv_ref = F.conv2d(x, model.weight, model.bias, stride=stride, padding=padding)
     print("PyTorch --- shape check:", out.shape == conv_ref.shape)
     print("PyTorch --- correctness check:", torch.allclose(out, conv_ref, atol=1e-4))

@@ -46,8 +46,8 @@ def conv2d_manual_jax(x, weight, bias, stride=1, padding=1):
     C_out, _, KH, KW = weight.shape
 
     # define your helper variables here
-    out_h = int(((H - KH + 2 * padding) / stride) + 1)
-    out_w = int(((W - KW + 2 * padding) / stride) + 1)
+    out_h = int(((H - KH + 2 * padding) // stride) + 1)
+    out_w = int(((W - KW + 2 * padding) // stride) + 1)
     
     # TO DO: 1) convert input (x) into shape (N, out_h*out_w, C*KH*KW).
     cols = im2col_manual_jax(x, KH, KW, stride, padding, out_h, out_w)
@@ -68,12 +68,33 @@ def conv2d_manual_jax(x, weight, bias, stride=1, padding=1):
 
 if __name__ == "__main__":
     # Instantiate PyTorch model
-    H, W = 33, 33
-    model = ConvModel(H, W, in_channels=3, out_channels=8, kernel_size=5, stride=1, padding=1)
+
+    # trial 1: 1.526661 ms
+    N, C, H, W = 8, 32, 128, 128
+    out_channels = 64
+    kernel_size = 3
+    stride = 1
+    padding = 1
+
+    # trial 2: 6.213642 ms
+    # N, C, H, W = 16, 64, 128, 128
+    # out_channels = 128
+    # kernel_size = 3
+    # stride = 1
+    # padding = 1
+
+    # trial 3: 67.782379 ms
+    # N, C, H, W = 16, 64, 256, 256
+    # out_channels = 128
+    # kernel_size = 5
+    # stride = 1
+    # padding = 2
+
+    model = ConvModel(H, W, in_channels=C, out_channels=out_channels, kernel_size=kernel_size, stride=stride, padding=padding)
     model.eval()
 
     # Example input
-    x_torch = torch.randn(1, 3, H, W)
+    x_torch = torch.randn(N, C, H, W)
 
     # Export weights and biases
     params = {
@@ -87,9 +108,9 @@ if __name__ == "__main__":
     bias = jnp.array(params["bias"])
 
     # enable JIT compilation
-    conv2d_manual_jax_jit = jit(conv2d_manual_jax)
+    conv2d_manual_jax_jit = jit(conv2d_manual_jax, static_argnums=(3, 4))
 
-    jax.profiler.start_trace("./trace/jax_trace")
+    # jax.profiler.start_trace("./trace/jax_trace")
 
     # call your JAX function
     _ = conv2d_manual_jax_jit(x, weight, bias)
@@ -99,12 +120,16 @@ if __name__ == "__main__":
         record_shapes=True,
         profile_memory=True
     ) as prof:
-        with record_function("manual_conv_jax"):
-            out = torch.from_numpy(np.array(conv2d_manual_jax_jit(x, weight, bias)))
+        # warmup run
+        # with record_function("JAX_First_Run_with_JIT"):
+        #     _ = conv2d_manual_jax_jit(x, weight, bias, stride, padding).block_until_ready()
+        
+        with record_function("JAX_Second_Run_Execution_Only"):
+            out = conv2d_manual_jax_jit(x, weight, bias, stride, padding).block_until_ready()
 
     prof.export_chrome_trace("./trace/trace_jax.json")
 
     # Test your solution
-    conv_ref = F.conv2d(x_torch, model.weight, model.bias, stride=1, padding=1)
+    conv_ref = F.conv2d(x_torch, model.weight, model.bias, stride=stride, padding=padding)
     print("JAX --- shape check:", out.shape == conv_ref.shape)
-    print("JAX --- correctness check:", torch.allclose(out, conv_ref, atol=1e-1))
+    print("JAX --- correctness check:", torch.allclose(torch.from_numpy(np.array(out)), conv_ref, atol=1e-1))
