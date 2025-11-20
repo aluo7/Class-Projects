@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.22)
+project(Jax4AutomaticDifferentiation)
+set(CMAKE_CXX_STANDARD 14)
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+add_executable(Jax4AutomaticDifferentiation dual_test.cpp)
+target_include_directories(Jax4AutomaticDifferentiation PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(Jax4AutomaticDifferentiation GTest::GTest GTest::Main pthread)
+enable_testing()
+add_test(NAME DualTests COMMAND Jax4AutomaticDifferentiation)
+
+
+# Add custom target to run tests
+add_custom_target(run_tests
+COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+DEPENDS Jax4AutomaticDifferentiation
+WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
