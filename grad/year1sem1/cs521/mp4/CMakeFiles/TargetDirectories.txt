@@ -1,0 +1,3 @@
+/home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/Jax4AutomaticDifferentiation.dir
+/home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/edit_cache.dir
+/home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/rebuild_cache.dir

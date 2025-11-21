@@ -1,0 +1,1949 @@
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineSystem.cmake:12 (find_program)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_UNAME"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "uname"
+    candidate_directories:
+      - "/opt/amazon/openmpi/bin/"
+      - "/opt/amazon/efa/bin/"
+      - "/opt/pytorch/bin/"
+      - "/usr/local/cuda/bin/"
+      - "/usr/local/cuda/include/"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/"
+      - "/opt/aws/bin/"
+      - "/home/ec2-user/miniconda3/bin/"
+      - "/home/ec2-user/miniconda3/condabin/"
+      - "/home/ec2-user/.local/bin/"
+      - "/home/ec2-user/bin/"
+      - "/usr/share/Modules/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/sbin/"
+      - "/bin/"
+    searched_directories:
+      - "/opt/amazon/openmpi/bin/uname"
+      - "/opt/amazon/efa/bin/uname"
+      - "/opt/pytorch/bin/uname"
+      - "/usr/local/cuda/bin/uname"
+      - "/usr/local/cuda/include/uname"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/uname"
+      - "/opt/aws/bin/uname"
+      - "/home/ec2-user/miniconda3/bin/uname"
+      - "/home/ec2-user/miniconda3/condabin/uname"
+      - "/home/ec2-user/.local/bin/uname"
+      - "/home/ec2-user/bin/uname"
+      - "/usr/share/Modules/bin/uname"
+      - "/usr/local/bin/uname"
+    found: "/usr/bin/uname"
+    search_context:
+      ENV{PATH}:
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/home/ec2-user/miniconda3/bin"
+        - "/home/ec2-user/miniconda3/condabin"
+        - "/home/ec2-user/.local/bin"
+        - "/home/ec2-user/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/usr/share/Modules/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineSystem.cmake:212 (message)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      The system is: Linux - 6.1.134-152.225.amzn2023.x86_64 - x86_64
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeUnixFindMake.cmake:5 (find_program)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_MAKE_PROGRAM"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "gmake"
+      - "make"
+      - "smake"
+    candidate_directories:
+      - "/opt/amazon/openmpi/bin/"
+      - "/opt/amazon/efa/bin/"
+      - "/opt/pytorch/bin/"
+      - "/usr/local/cuda/bin/"
+      - "/usr/local/cuda/include/"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/"
+      - "/opt/aws/bin/"
+      - "/home/ec2-user/miniconda3/bin/"
+      - "/home/ec2-user/miniconda3/condabin/"
+      - "/home/ec2-user/.local/bin/"
+      - "/home/ec2-user/bin/"
+      - "/usr/share/Modules/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/sbin/"
+    searched_directories:
+      - "/opt/amazon/openmpi/bin/gmake"
+      - "/opt/amazon/efa/bin/gmake"
+      - "/opt/pytorch/bin/gmake"
+      - "/usr/local/cuda/bin/gmake"
+      - "/usr/local/cuda/include/gmake"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/gmake"
+      - "/opt/aws/bin/gmake"
+      - "/home/ec2-user/miniconda3/bin/gmake"
+      - "/home/ec2-user/miniconda3/condabin/gmake"
+      - "/home/ec2-user/.local/bin/gmake"
+      - "/home/ec2-user/bin/gmake"
+      - "/usr/share/Modules/bin/gmake"
+      - "/usr/local/bin/gmake"
+    found: "/usr/bin/gmake"
+    search_context:
+      ENV{PATH}:
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/home/ec2-user/miniconda3/bin"
+        - "/home/ec2-user/miniconda3/condabin"
+        - "/home/ec2-user/.local/bin"
+        - "/home/ec2-user/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/usr/share/Modules/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCompiler.cmake:73 (find_program)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:69 (_cmake_find_compiler)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_CXX_COMPILER"
+    description: "CXX compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "c++"
+      - "CC"
+      - "g++"
+      - "aCC"
+      - "cl"
+      - "bcc"
+      - "xlC"
+      - "icpx"
+      - "icx"
+      - "clang++"
+    candidate_directories:
+      - "/opt/amazon/openmpi/bin/"
+      - "/opt/amazon/efa/bin/"
+      - "/opt/pytorch/bin/"
+      - "/usr/local/cuda/bin/"
+      - "/usr/local/cuda/include/"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/"
+      - "/opt/aws/bin/"
+      - "/home/ec2-user/miniconda3/bin/"
+      - "/home/ec2-user/miniconda3/condabin/"
+      - "/home/ec2-user/.local/bin/"
+      - "/home/ec2-user/bin/"
+      - "/usr/share/Modules/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/sbin/"
+    searched_directories:
+      - "/opt/amazon/openmpi/bin/c++"
+      - "/opt/amazon/efa/bin/c++"
+      - "/opt/pytorch/bin/c++"
+      - "/usr/local/cuda/bin/c++"
+      - "/usr/local/cuda/include/c++"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/c++"
+      - "/opt/aws/bin/c++"
+      - "/home/ec2-user/miniconda3/bin/c++"
+      - "/home/ec2-user/miniconda3/condabin/c++"
+      - "/home/ec2-user/.local/bin/c++"
+      - "/home/ec2-user/bin/c++"
+      - "/usr/share/Modules/bin/c++"
+      - "/usr/local/bin/c++"
+    found: "/usr/bin/c++"
+    search_context:
+      ENV{PATH}:
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/home/ec2-user/miniconda3/bin"
+        - "/home/ec2-user/miniconda3/condabin"
+        - "/home/ec2-user/.local/bin"
+        - "/home/ec2-user/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/usr/share/Modules/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:462 (find_file)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:500 (CMAKE_DETERMINE_COMPILER_ID_WRITE)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:8 (CMAKE_DETERMINE_COMPILER_ID_BUILD)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:125 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "file"
+    variable: "src_in"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "CMakeCXXCompilerId.cpp.in"
+    candidate_directories:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/"
+    found: "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeCXXCompilerId.cpp.in"
+    search_context:
+      ENV{PATH}:
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/home/ec2-user/miniconda3/bin"
+        - "/home/ec2-user/miniconda3/condabin"
+        - "/home/ec2-user/.local/bin"
+        - "/home/ec2-user/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/usr/share/Modules/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:125 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /usr/bin/c++ 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+      
+      The CXX compiler identification is GNU, found in:
+        /home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/4.1.3/CompilerIdCXX/a.out
+      
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_AR"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ar"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/opt/amazon/openmpi/bin/"
+      - "/opt/amazon/efa/bin/"
+      - "/opt/pytorch/bin/"
+      - "/usr/local/cuda/bin/"
+      - "/usr/local/cuda/include/"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/"
+      - "/opt/aws/bin/"
+      - "/home/ec2-user/miniconda3/bin/"
+      - "/home/ec2-user/miniconda3/condabin/"
+      - "/home/ec2-user/.local/bin/"
+      - "/home/ec2-user/bin/"
+      - "/usr/share/Modules/bin/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/sbin/"
+    found: "/usr/bin/ar"
+    search_context:
+      ENV{PATH}:
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/home/ec2-user/miniconda3/bin"
+        - "/home/ec2-user/miniconda3/condabin"
+        - "/home/ec2-user/.local/bin"
+        - "/home/ec2-user/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/usr/share/Modules/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_RANLIB"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ranlib"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/opt/amazon/openmpi/bin/"
+      - "/opt/amazon/efa/bin/"
+      - "/opt/pytorch/bin/"
+      - "/usr/local/cuda/bin/"
+      - "/usr/local/cuda/include/"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/"
+      - "/opt/aws/bin/"
+      - "/home/ec2-user/miniconda3/bin/"
+      - "/home/ec2-user/miniconda3/condabin/"
+      - "/home/ec2-user/.local/bin/"
+      - "/home/ec2-user/bin/"
+      - "/usr/share/Modules/bin/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/sbin/"
+    found: "/usr/bin/ranlib"
+    search_context:
+      ENV{PATH}:
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/home/ec2-user/miniconda3/bin"
+        - "/home/ec2-user/miniconda3/condabin"
+        - "/home/ec2-user/.local/bin"
+        - "/home/ec2-user/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/usr/share/Modules/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_STRIP"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "strip"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/opt/amazon/openmpi/bin/"
+      - "/opt/amazon/efa/bin/"
+      - "/opt/pytorch/bin/"
+      - "/usr/local/cuda/bin/"
+      - "/usr/local/cuda/include/"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/"
+      - "/opt/aws/bin/"
+      - "/home/ec2-user/miniconda3/bin/"
+      - "/home/ec2-user/miniconda3/condabin/"
+      - "/home/ec2-user/.local/bin/"
+      - "/home/ec2-user/bin/"
+      - "/usr/share/Modules/bin/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/sbin/"
+    found: "/usr/bin/strip"
+    search_context:
+      ENV{PATH}:
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/home/ec2-user/miniconda3/bin"
+        - "/home/ec2-user/miniconda3/condabin"
+        - "/home/ec2-user/.local/bin"
+        - "/home/ec2-user/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/usr/share/Modules/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_LINKER"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ld"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/opt/amazon/openmpi/bin/"
+      - "/opt/amazon/efa/bin/"
+      - "/opt/pytorch/bin/"
+      - "/usr/local/cuda/bin/"
+      - "/usr/local/cuda/include/"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/"
+      - "/opt/aws/bin/"
+      - "/home/ec2-user/miniconda3/bin/"
+      - "/home/ec2-user/miniconda3/condabin/"
+      - "/home/ec2-user/.local/bin/"
+      - "/home/ec2-user/bin/"
+      - "/usr/share/Modules/bin/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/sbin/"
+    found: "/usr/bin/ld"
+    search_context:
+      ENV{PATH}:
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/home/ec2-user/miniconda3/bin"
+        - "/home/ec2-user/miniconda3/condabin"
+        - "/home/ec2-user/.local/bin"
+        - "/home/ec2-user/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/usr/share/Modules/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_NM"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "nm"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/opt/amazon/openmpi/bin/"
+      - "/opt/amazon/efa/bin/"
+      - "/opt/pytorch/bin/"
+      - "/usr/local/cuda/bin/"
+      - "/usr/local/cuda/include/"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/"
+      - "/opt/aws/bin/"
+      - "/home/ec2-user/miniconda3/bin/"
+      - "/home/ec2-user/miniconda3/condabin/"
+      - "/home/ec2-user/.local/bin/"
+      - "/home/ec2-user/bin/"
+      - "/usr/share/Modules/bin/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/sbin/"
+    found: "/usr/bin/nm"
+    search_context:
+      ENV{PATH}:
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/home/ec2-user/miniconda3/bin"
+        - "/home/ec2-user/miniconda3/condabin"
+        - "/home/ec2-user/.local/bin"
+        - "/home/ec2-user/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/usr/share/Modules/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_OBJDUMP"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "objdump"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/opt/amazon/openmpi/bin/"
+      - "/opt/amazon/efa/bin/"
+      - "/opt/pytorch/bin/"
+      - "/usr/local/cuda/bin/"
+      - "/usr/local/cuda/include/"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/"
+      - "/opt/aws/bin/"
+      - "/home/ec2-user/miniconda3/bin/"
+      - "/home/ec2-user/miniconda3/condabin/"
+      - "/home/ec2-user/.local/bin/"
+      - "/home/ec2-user/bin/"
+      - "/usr/share/Modules/bin/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/sbin/"
+    found: "/usr/bin/objdump"
+    search_context:
+      ENV{PATH}:
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/home/ec2-user/miniconda3/bin"
+        - "/home/ec2-user/miniconda3/condabin"
+        - "/home/ec2-user/.local/bin"
+        - "/home/ec2-user/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/usr/share/Modules/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_OBJCOPY"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "objcopy"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/opt/amazon/openmpi/bin/"
+      - "/opt/amazon/efa/bin/"
+      - "/opt/pytorch/bin/"
+      - "/usr/local/cuda/bin/"
+      - "/usr/local/cuda/include/"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/"
+      - "/opt/aws/bin/"
+      - "/home/ec2-user/miniconda3/bin/"
+      - "/home/ec2-user/miniconda3/condabin/"
+      - "/home/ec2-user/.local/bin/"
+      - "/home/ec2-user/bin/"
+      - "/usr/share/Modules/bin/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/sbin/"
+    found: "/usr/bin/objcopy"
+    search_context:
+      ENV{PATH}:
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/home/ec2-user/miniconda3/bin"
+        - "/home/ec2-user/miniconda3/condabin"
+        - "/home/ec2-user/.local/bin"
+        - "/home/ec2-user/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/usr/share/Modules/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_READELF"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "readelf"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/opt/amazon/openmpi/bin/"
+      - "/opt/amazon/efa/bin/"
+      - "/opt/pytorch/bin/"
+      - "/usr/local/cuda/bin/"
+      - "/usr/local/cuda/include/"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/"
+      - "/opt/aws/bin/"
+      - "/home/ec2-user/miniconda3/bin/"
+      - "/home/ec2-user/miniconda3/condabin/"
+      - "/home/ec2-user/.local/bin/"
+      - "/home/ec2-user/bin/"
+      - "/usr/share/Modules/bin/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/sbin/"
+    found: "/usr/bin/readelf"
+    search_context:
+      ENV{PATH}:
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/home/ec2-user/miniconda3/bin"
+        - "/home/ec2-user/miniconda3/condabin"
+        - "/home/ec2-user/.local/bin"
+        - "/home/ec2-user/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/usr/share/Modules/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_DLLTOOL"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "dlltool"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/opt/amazon/openmpi/bin/"
+      - "/opt/amazon/efa/bin/"
+      - "/opt/pytorch/bin/"
+      - "/usr/local/cuda/bin/"
+      - "/usr/local/cuda/include/"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/"
+      - "/opt/aws/bin/"
+      - "/home/ec2-user/miniconda3/bin/"
+      - "/home/ec2-user/miniconda3/condabin/"
+      - "/home/ec2-user/.local/bin/"
+      - "/home/ec2-user/bin/"
+      - "/usr/share/Modules/bin/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/sbin/"
+    searched_directories:
+      - "/usr/bin/dlltool"
+      - "/opt/amazon/openmpi/bin/dlltool"
+      - "/opt/amazon/efa/bin/dlltool"
+      - "/opt/pytorch/bin/dlltool"
+      - "/usr/local/cuda/bin/dlltool"
+      - "/usr/local/cuda/include/dlltool"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/dlltool"
+      - "/opt/aws/bin/dlltool"
+      - "/home/ec2-user/miniconda3/bin/dlltool"
+      - "/home/ec2-user/miniconda3/condabin/dlltool"
+      - "/home/ec2-user/.local/bin/dlltool"
+      - "/home/ec2-user/bin/dlltool"
+      - "/usr/share/Modules/bin/dlltool"
+      - "/usr/local/bin/dlltool"
+      - "/usr/local/sbin/dlltool"
+      - "/usr/sbin/dlltool"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/home/ec2-user/miniconda3/bin"
+        - "/home/ec2-user/miniconda3/condabin"
+        - "/home/ec2-user/.local/bin"
+        - "/home/ec2-user/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/usr/share/Modules/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_ADDR2LINE"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "addr2line"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/opt/amazon/openmpi/bin/"
+      - "/opt/amazon/efa/bin/"
+      - "/opt/pytorch/bin/"
+      - "/usr/local/cuda/bin/"
+      - "/usr/local/cuda/include/"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/"
+      - "/opt/aws/bin/"
+      - "/home/ec2-user/miniconda3/bin/"
+      - "/home/ec2-user/miniconda3/condabin/"
+      - "/home/ec2-user/.local/bin/"
+      - "/home/ec2-user/bin/"
+      - "/usr/share/Modules/bin/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/sbin/"
+    found: "/usr/bin/addr2line"
+    search_context:
+      ENV{PATH}:
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/home/ec2-user/miniconda3/bin"
+        - "/home/ec2-user/miniconda3/condabin"
+        - "/home/ec2-user/.local/bin"
+        - "/home/ec2-user/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/usr/share/Modules/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_TAPI"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "tapi"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/opt/amazon/openmpi/bin/"
+      - "/opt/amazon/efa/bin/"
+      - "/opt/pytorch/bin/"
+      - "/usr/local/cuda/bin/"
+      - "/usr/local/cuda/include/"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/"
+      - "/opt/aws/bin/"
+      - "/home/ec2-user/miniconda3/bin/"
+      - "/home/ec2-user/miniconda3/condabin/"
+      - "/home/ec2-user/.local/bin/"
+      - "/home/ec2-user/bin/"
+      - "/usr/share/Modules/bin/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/sbin/"
+    searched_directories:
+      - "/usr/bin/tapi"
+      - "/opt/amazon/openmpi/bin/tapi"
+      - "/opt/amazon/efa/bin/tapi"
+      - "/opt/pytorch/bin/tapi"
+      - "/usr/local/cuda/bin/tapi"
+      - "/usr/local/cuda/include/tapi"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/tapi"
+      - "/opt/aws/bin/tapi"
+      - "/home/ec2-user/miniconda3/bin/tapi"
+      - "/home/ec2-user/miniconda3/condabin/tapi"
+      - "/home/ec2-user/.local/bin/tapi"
+      - "/home/ec2-user/bin/tapi"
+      - "/usr/share/Modules/bin/tapi"
+      - "/usr/local/bin/tapi"
+      - "/usr/local/sbin/tapi"
+      - "/usr/sbin/tapi"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/home/ec2-user/miniconda3/bin"
+        - "/home/ec2-user/miniconda3/condabin"
+        - "/home/ec2-user/.local/bin"
+        - "/home/ec2-user/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/usr/share/Modules/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/Compiler/GNU-FindBinUtils.cmake:18 (find_program)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:207 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_CXX_COMPILER_AR"
+    description: "A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "gcc-ar-11.5"
+      - "gcc-ar-11"
+      - "gcc-ar11"
+      - "gcc-ar"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/opt/amazon/openmpi/bin/"
+      - "/opt/amazon/efa/bin/"
+      - "/opt/pytorch/bin/"
+      - "/usr/local/cuda/bin/"
+      - "/usr/local/cuda/include/"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/"
+      - "/opt/aws/bin/"
+      - "/home/ec2-user/miniconda3/bin/"
+      - "/home/ec2-user/miniconda3/condabin/"
+      - "/home/ec2-user/.local/bin/"
+      - "/home/ec2-user/bin/"
+      - "/usr/share/Modules/bin/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/sbin/"
+    searched_directories:
+      - "/usr/bin/gcc-ar-11.5"
+      - "/opt/amazon/openmpi/bin/gcc-ar-11.5"
+      - "/opt/amazon/efa/bin/gcc-ar-11.5"
+      - "/opt/pytorch/bin/gcc-ar-11.5"
+      - "/usr/local/cuda/bin/gcc-ar-11.5"
+      - "/usr/local/cuda/include/gcc-ar-11.5"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/gcc-ar-11.5"
+      - "/opt/aws/bin/gcc-ar-11.5"
+      - "/home/ec2-user/miniconda3/bin/gcc-ar-11.5"
+      - "/home/ec2-user/miniconda3/condabin/gcc-ar-11.5"
+      - "/home/ec2-user/.local/bin/gcc-ar-11.5"
+      - "/home/ec2-user/bin/gcc-ar-11.5"
+      - "/usr/share/Modules/bin/gcc-ar-11.5"
+      - "/usr/local/bin/gcc-ar-11.5"
+      - "/usr/local/sbin/gcc-ar-11.5"
+      - "/usr/sbin/gcc-ar-11.5"
+      - "/usr/bin/gcc-ar-11"
+      - "/opt/amazon/openmpi/bin/gcc-ar-11"
+      - "/opt/amazon/efa/bin/gcc-ar-11"
+      - "/opt/pytorch/bin/gcc-ar-11"
+      - "/usr/local/cuda/bin/gcc-ar-11"
+      - "/usr/local/cuda/include/gcc-ar-11"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/gcc-ar-11"
+      - "/opt/aws/bin/gcc-ar-11"
+      - "/home/ec2-user/miniconda3/bin/gcc-ar-11"
+      - "/home/ec2-user/miniconda3/condabin/gcc-ar-11"
+      - "/home/ec2-user/.local/bin/gcc-ar-11"
+      - "/home/ec2-user/bin/gcc-ar-11"
+      - "/usr/share/Modules/bin/gcc-ar-11"
+      - "/usr/local/bin/gcc-ar-11"
+      - "/usr/local/sbin/gcc-ar-11"
+      - "/usr/sbin/gcc-ar-11"
+      - "/usr/bin/gcc-ar11"
+      - "/opt/amazon/openmpi/bin/gcc-ar11"
+      - "/opt/amazon/efa/bin/gcc-ar11"
+      - "/opt/pytorch/bin/gcc-ar11"
+      - "/usr/local/cuda/bin/gcc-ar11"
+      - "/usr/local/cuda/include/gcc-ar11"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/gcc-ar11"
+      - "/opt/aws/bin/gcc-ar11"
+      - "/home/ec2-user/miniconda3/bin/gcc-ar11"
+      - "/home/ec2-user/miniconda3/condabin/gcc-ar11"
+      - "/home/ec2-user/.local/bin/gcc-ar11"
+      - "/home/ec2-user/bin/gcc-ar11"
+      - "/usr/share/Modules/bin/gcc-ar11"
+      - "/usr/local/bin/gcc-ar11"
+      - "/usr/local/sbin/gcc-ar11"
+      - "/usr/sbin/gcc-ar11"
+    found: "/usr/bin/gcc-ar"
+    search_context:
+      ENV{PATH}:
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/home/ec2-user/miniconda3/bin"
+        - "/home/ec2-user/miniconda3/condabin"
+        - "/home/ec2-user/.local/bin"
+        - "/home/ec2-user/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/usr/share/Modules/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/Compiler/GNU-FindBinUtils.cmake:30 (find_program)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:207 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_CXX_COMPILER_RANLIB"
+    description: "A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "gcc-ranlib-11.5"
+      - "gcc-ranlib-11"
+      - "gcc-ranlib11"
+      - "gcc-ranlib"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/opt/amazon/openmpi/bin/"
+      - "/opt/amazon/efa/bin/"
+      - "/opt/pytorch/bin/"
+      - "/usr/local/cuda/bin/"
+      - "/usr/local/cuda/include/"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/"
+      - "/opt/aws/bin/"
+      - "/home/ec2-user/miniconda3/bin/"
+      - "/home/ec2-user/miniconda3/condabin/"
+      - "/home/ec2-user/.local/bin/"
+      - "/home/ec2-user/bin/"
+      - "/usr/share/Modules/bin/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/sbin/"
+    searched_directories:
+      - "/usr/bin/gcc-ranlib-11.5"
+      - "/opt/amazon/openmpi/bin/gcc-ranlib-11.5"
+      - "/opt/amazon/efa/bin/gcc-ranlib-11.5"
+      - "/opt/pytorch/bin/gcc-ranlib-11.5"
+      - "/usr/local/cuda/bin/gcc-ranlib-11.5"
+      - "/usr/local/cuda/include/gcc-ranlib-11.5"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/gcc-ranlib-11.5"
+      - "/opt/aws/bin/gcc-ranlib-11.5"
+      - "/home/ec2-user/miniconda3/bin/gcc-ranlib-11.5"
+      - "/home/ec2-user/miniconda3/condabin/gcc-ranlib-11.5"
+      - "/home/ec2-user/.local/bin/gcc-ranlib-11.5"
+      - "/home/ec2-user/bin/gcc-ranlib-11.5"
+      - "/usr/share/Modules/bin/gcc-ranlib-11.5"
+      - "/usr/local/bin/gcc-ranlib-11.5"
+      - "/usr/local/sbin/gcc-ranlib-11.5"
+      - "/usr/sbin/gcc-ranlib-11.5"
+      - "/usr/bin/gcc-ranlib-11"
+      - "/opt/amazon/openmpi/bin/gcc-ranlib-11"
+      - "/opt/amazon/efa/bin/gcc-ranlib-11"
+      - "/opt/pytorch/bin/gcc-ranlib-11"
+      - "/usr/local/cuda/bin/gcc-ranlib-11"
+      - "/usr/local/cuda/include/gcc-ranlib-11"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/gcc-ranlib-11"
+      - "/opt/aws/bin/gcc-ranlib-11"
+      - "/home/ec2-user/miniconda3/bin/gcc-ranlib-11"
+      - "/home/ec2-user/miniconda3/condabin/gcc-ranlib-11"
+      - "/home/ec2-user/.local/bin/gcc-ranlib-11"
+      - "/home/ec2-user/bin/gcc-ranlib-11"
+      - "/usr/share/Modules/bin/gcc-ranlib-11"
+      - "/usr/local/bin/gcc-ranlib-11"
+      - "/usr/local/sbin/gcc-ranlib-11"
+      - "/usr/sbin/gcc-ranlib-11"
+      - "/usr/bin/gcc-ranlib11"
+      - "/opt/amazon/openmpi/bin/gcc-ranlib11"
+      - "/opt/amazon/efa/bin/gcc-ranlib11"
+      - "/opt/pytorch/bin/gcc-ranlib11"
+      - "/usr/local/cuda/bin/gcc-ranlib11"
+      - "/usr/local/cuda/include/gcc-ranlib11"
+      - "/usr/libexec/gcc/x86_64-amazon-linux/11/gcc-ranlib11"
+      - "/opt/aws/bin/gcc-ranlib11"
+      - "/home/ec2-user/miniconda3/bin/gcc-ranlib11"
+      - "/home/ec2-user/miniconda3/condabin/gcc-ranlib11"
+      - "/home/ec2-user/.local/bin/gcc-ranlib11"
+      - "/home/ec2-user/bin/gcc-ranlib11"
+      - "/usr/share/Modules/bin/gcc-ranlib11"
+      - "/usr/local/bin/gcc-ranlib11"
+      - "/usr/local/sbin/gcc-ranlib11"
+      - "/usr/sbin/gcc-ranlib11"
+    found: "/usr/bin/gcc-ranlib"
+    search_context:
+      ENV{PATH}:
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/home/ec2-user/miniconda3/bin"
+        - "/home/ec2-user/miniconda3/condabin"
+        - "/home/ec2-user/.local/bin"
+        - "/home/ec2-user/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/usr/share/Modules/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCompilerABI.cmake:83 (try_compile)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "/home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/CMakeScratch/TryCompile-MXehim"
+      binary: "/home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/CMakeScratch/TryCompile-MXehim"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_CXX_SCAN_FOR_MODULES: "OFF"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/CMakeScratch/TryCompile-MXehim'
+        
+        Run Build Command(s): /opt/pytorch/lib/python3.12/site-packages/cmake/data/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_ad9e1/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_ad9e1.dir/build.make CMakeFiles/cmTC_ad9e1.dir/build
+        gmake[1]: Entering directory '/home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/CMakeScratch/TryCompile-MXehim'
+        Building CXX object CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.o
+        /usr/bin/c++   -v -o CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.o -c /opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeCXXCompilerABI.cpp
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/c++
+        OFFLOAD_TARGET_NAMES=nvptx-none
+        OFFLOAD_TARGET_DEFAULT=1
+        Target: x86_64-amazon-linux
+        Configured with: ../configure --enable-bootstrap --enable-host-pie --enable-host-bind-now --enable-languages=c,c++,fortran,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://github.com/amazonlinux/amazon-linux-2022 --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.5.0-20240719/obj-x86_64-amazon-linux/isl-install --enable-multilib --with-linker-hash-style=gnu --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_64=x86-64-v2 --with-arch_32=x86-64 --build=x86_64-amazon-linux --with-build-config=bootstrap-lto --enable-link-serialization=1
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 11.5.0 20240719 (Red Hat 11.5.0-5) (GCC) 
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64-v2' '-dumpdir' 'CMakeFiles/cmTC_ad9e1.dir/'
+         /usr/libexec/gcc/x86_64-amazon-linux/11/cc1plus -quiet -v -D_GNU_SOURCE /opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_ad9e1.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64-v2 -version -o /tmp/cc4X5G63.s
+        GNU C++17 (GCC) version 11.5.0 20240719 (Red Hat 11.5.0-5) (x86_64-amazon-linux)
+        	compiled by GNU C version 11.5.0 20240719 (Red Hat 11.5.0-5), GMP version 6.2.1, MPFR version 4.1.0-p13, MPC version 1.2.1, isl version isl-0.18-GMP
+        
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring nonexistent directory "/usr/lib/gcc/x86_64-amazon-linux/11/include-fixed"
+        ignoring nonexistent directory "/usr/lib/gcc/x86_64-amazon-linux/11/../../../../x86_64-amazon-linux/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/lib/gcc/x86_64-amazon-linux/11/../../../../include/c++/11
+         /usr/lib/gcc/x86_64-amazon-linux/11/../../../../include/c++/11/x86_64-amazon-linux
+         /usr/lib/gcc/x86_64-amazon-linux/11/../../../../include/c++/11/backward
+         /usr/lib/gcc/x86_64-amazon-linux/11/include
+         /usr/local/include
+         /usr/include
+        End of search list.
+        GNU C++17 (GCC) version 11.5.0 20240719 (Red Hat 11.5.0-5) (x86_64-amazon-linux)
+        	compiled by GNU C version 11.5.0 20240719 (Red Hat 11.5.0-5), GMP version 6.2.1, MPFR version 4.1.0-p13, MPC version 1.2.1, isl version isl-0.18-GMP
+        
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        Compiler executable checksum: 504388a976c3549da5cde3cbb2f44058
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64-v2' '-dumpdir' 'CMakeFiles/cmTC_ad9e1.dir/'
+         as -v --64 -o CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.o /tmp/cc4X5G63.s
+        GNU assembler version 2.41 (x86_64-amazon-linux) using BFD version version 2.41-50.amzn2023.0.3
+        COMPILER_PATH=/usr/libexec/gcc/x86_64-amazon-linux/11/:/usr/libexec/gcc/x86_64-amazon-linux/11/:/usr/libexec/gcc/x86_64-amazon-linux/:/usr/lib/gcc/x86_64-amazon-linux/11/:/usr/lib/gcc/x86_64-amazon-linux/
+        LIBRARY_PATH=/usr/lib/gcc/x86_64-amazon-linux/11/:/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-amazon-linux/11/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64-v2' '-dumpdir' 'CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.'
+        Linking CXX executable cmTC_ad9e1
+        /opt/pytorch/lib/python3.12/site-packages/cmake/data/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ad9e1.dir/link.txt --verbose=1
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/c++
+        COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-amazon-linux/11/lto-wrapper
+        OFFLOAD_TARGET_NAMES=nvptx-none
+        OFFLOAD_TARGET_DEFAULT=1
+        Target: x86_64-amazon-linux
+        Configured with: ../configure --enable-bootstrap --enable-host-pie --enable-host-bind-now --enable-languages=c,c++,fortran,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://github.com/amazonlinux/amazon-linux-2022 --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.5.0-20240719/obj-x86_64-amazon-linux/isl-install --enable-multilib --with-linker-hash-style=gnu --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_64=x86-64-v2 --with-arch_32=x86-64 --build=x86_64-amazon-linux --with-build-config=bootstrap-lto --enable-link-serialization=1
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 11.5.0 20240719 (Red Hat 11.5.0-5) (GCC) 
+        COMPILER_PATH=/usr/libexec/gcc/x86_64-amazon-linux/11/:/usr/libexec/gcc/x86_64-amazon-linux/11/:/usr/libexec/gcc/x86_64-amazon-linux/:/usr/lib/gcc/x86_64-amazon-linux/11/:/usr/lib/gcc/x86_64-amazon-linux/
+        LIBRARY_PATH=/usr/lib/gcc/x86_64-amazon-linux/11/:/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-amazon-linux/11/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_ad9e1' '-shared-libgcc' '-mtune=generic' '-march=x86-64-v2' '-dumpdir' 'cmTC_ad9e1.'
+         /usr/libexec/gcc/x86_64-amazon-linux/11/collect2 -plugin /usr/libexec/gcc/x86_64-amazon-linux/11/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-amazon-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccLzTRE7.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_ad9e1 /usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crti.o /usr/lib/gcc/x86_64-amazon-linux/11/crtbegin.o -L/usr/lib/gcc/x86_64-amazon-linux/11 -L/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-amazon-linux/11/../../.. -v CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-amazon-linux/11/crtend.o /usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crtn.o
+        collect2 version 11.5.0 20240719 (Red Hat 11.5.0-5)
+        /usr/bin/ld -plugin /usr/libexec/gcc/x86_64-amazon-linux/11/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-amazon-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccLzTRE7.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_ad9e1 /usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crti.o /usr/lib/gcc/x86_64-amazon-linux/11/crtbegin.o -L/usr/lib/gcc/x86_64-amazon-linux/11 -L/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-amazon-linux/11/../../.. -v CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-amazon-linux/11/crtend.o /usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crtn.o
+        GNU ld version 2.41-50.amzn2023.0.3
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_ad9e1' '-shared-libgcc' '-mtune=generic' '-march=x86-64-v2' '-dumpdir' 'cmTC_ad9e1.'
+        /usr/bin/c++  -v -Wl,-v CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_ad9e1
+        gmake[1]: Leaving directory '/home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/CMakeScratch/TryCompile-MXehim'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCompilerABI.cmake:217 (message)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed CXX implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/usr/lib/gcc/x86_64-amazon-linux/11/../../../../include/c++/11]
+          add: [/usr/lib/gcc/x86_64-amazon-linux/11/../../../../include/c++/11/x86_64-amazon-linux]
+          add: [/usr/lib/gcc/x86_64-amazon-linux/11/../../../../include/c++/11/backward]
+          add: [/usr/lib/gcc/x86_64-amazon-linux/11/include]
+          add: [/usr/local/include]
+          add: [/usr/include]
+        end of search list found
+        collapse include dir [/usr/lib/gcc/x86_64-amazon-linux/11/../../../../include/c++/11] ==> [/usr/include/c++/11]
+        collapse include dir [/usr/lib/gcc/x86_64-amazon-linux/11/../../../../include/c++/11/x86_64-amazon-linux] ==> [/usr/include/c++/11/x86_64-amazon-linux]
+        collapse include dir [/usr/lib/gcc/x86_64-amazon-linux/11/../../../../include/c++/11/backward] ==> [/usr/include/c++/11/backward]
+        collapse include dir [/usr/lib/gcc/x86_64-amazon-linux/11/include] ==> [/usr/lib/gcc/x86_64-amazon-linux/11/include]
+        collapse include dir [/usr/local/include] ==> [/usr/local/include]
+        collapse include dir [/usr/include] ==> [/usr/include]
+        implicit include dirs: [/usr/include/c++/11;/usr/include/c++/11/x86_64-amazon-linux;/usr/include/c++/11/backward;/usr/lib/gcc/x86_64-amazon-linux/11/include;/usr/local/include;/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCompilerABI.cmake:253 (message)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
+        ignore line: [Change Dir: '/home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/CMakeScratch/TryCompile-MXehim']
+        ignore line: []
+        ignore line: [Run Build Command(s): /opt/pytorch/lib/python3.12/site-packages/cmake/data/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_ad9e1/fast]
+        ignore line: [/usr/bin/gmake  -f CMakeFiles/cmTC_ad9e1.dir/build.make CMakeFiles/cmTC_ad9e1.dir/build]
+        ignore line: [gmake[1]: Entering directory '/home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/CMakeScratch/TryCompile-MXehim']
+        ignore line: [Building CXX object CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.o]
+        ignore line: [/usr/bin/c++   -v -o CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.o -c /opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/c++]
+        ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none]
+        ignore line: [OFFLOAD_TARGET_DEFAULT=1]
+        ignore line: [Target: x86_64-amazon-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-host-pie --enable-host-bind-now --enable-languages=c c++ fortran lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://github.com/amazonlinux/amazon-linux-2022 --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.5.0-20240719/obj-x86_64-amazon-linux/isl-install --enable-multilib --with-linker-hash-style=gnu --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_64=x86-64-v2 --with-arch_32=x86-64 --build=x86_64-amazon-linux --with-build-config=bootstrap-lto --enable-link-serialization=1]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 11.5.0 20240719 (Red Hat 11.5.0-5) (GCC) ]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64-v2' '-dumpdir' 'CMakeFiles/cmTC_ad9e1.dir/']
+        ignore line: [ /usr/libexec/gcc/x86_64-amazon-linux/11/cc1plus -quiet -v -D_GNU_SOURCE /opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_ad9e1.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64-v2 -version -o /tmp/cc4X5G63.s]
+        ignore line: [GNU C++17 (GCC) version 11.5.0 20240719 (Red Hat 11.5.0-5) (x86_64-amazon-linux)]
+        ignore line: [	compiled by GNU C version 11.5.0 20240719 (Red Hat 11.5.0-5)  GMP version 6.2.1  MPFR version 4.1.0-p13  MPC version 1.2.1  isl version isl-0.18-GMP]
+        ignore line: []
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-amazon-linux/11/include-fixed"]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-amazon-linux/11/../../../../x86_64-amazon-linux/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /usr/lib/gcc/x86_64-amazon-linux/11/../../../../include/c++/11]
+        ignore line: [ /usr/lib/gcc/x86_64-amazon-linux/11/../../../../include/c++/11/x86_64-amazon-linux]
+        ignore line: [ /usr/lib/gcc/x86_64-amazon-linux/11/../../../../include/c++/11/backward]
+        ignore line: [ /usr/lib/gcc/x86_64-amazon-linux/11/include]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /usr/include]
+        ignore line: [End of search list.]
+        ignore line: [GNU C++17 (GCC) version 11.5.0 20240719 (Red Hat 11.5.0-5) (x86_64-amazon-linux)]
+        ignore line: [	compiled by GNU C version 11.5.0 20240719 (Red Hat 11.5.0-5)  GMP version 6.2.1  MPFR version 4.1.0-p13  MPC version 1.2.1  isl version isl-0.18-GMP]
+        ignore line: []
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [Compiler executable checksum: 504388a976c3549da5cde3cbb2f44058]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64-v2' '-dumpdir' 'CMakeFiles/cmTC_ad9e1.dir/']
+        ignore line: [ as -v --64 -o CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.o /tmp/cc4X5G63.s]
+        ignore line: [GNU assembler version 2.41 (x86_64-amazon-linux) using BFD version version 2.41-50.amzn2023.0.3]
+        ignore line: [COMPILER_PATH=/usr/libexec/gcc/x86_64-amazon-linux/11/:/usr/libexec/gcc/x86_64-amazon-linux/11/:/usr/libexec/gcc/x86_64-amazon-linux/:/usr/lib/gcc/x86_64-amazon-linux/11/:/usr/lib/gcc/x86_64-amazon-linux/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-amazon-linux/11/:/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-amazon-linux/11/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64-v2' '-dumpdir' 'CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.']
+        ignore line: [Linking CXX executable cmTC_ad9e1]
+        ignore line: [/opt/pytorch/lib/python3.12/site-packages/cmake/data/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ad9e1.dir/link.txt --verbose=1]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/c++]
+        ignore line: [COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-amazon-linux/11/lto-wrapper]
+        ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none]
+        ignore line: [OFFLOAD_TARGET_DEFAULT=1]
+        ignore line: [Target: x86_64-amazon-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-host-pie --enable-host-bind-now --enable-languages=c c++ fortran lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://github.com/amazonlinux/amazon-linux-2022 --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.5.0-20240719/obj-x86_64-amazon-linux/isl-install --enable-multilib --with-linker-hash-style=gnu --enable-offload-targets=nvptx-none --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_64=x86-64-v2 --with-arch_32=x86-64 --build=x86_64-amazon-linux --with-build-config=bootstrap-lto --enable-link-serialization=1]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 11.5.0 20240719 (Red Hat 11.5.0-5) (GCC) ]
+        ignore line: [COMPILER_PATH=/usr/libexec/gcc/x86_64-amazon-linux/11/:/usr/libexec/gcc/x86_64-amazon-linux/11/:/usr/libexec/gcc/x86_64-amazon-linux/:/usr/lib/gcc/x86_64-amazon-linux/11/:/usr/lib/gcc/x86_64-amazon-linux/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-amazon-linux/11/:/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-amazon-linux/11/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_ad9e1' '-shared-libgcc' '-mtune=generic' '-march=x86-64-v2' '-dumpdir' 'cmTC_ad9e1.']
+        link line: [ /usr/libexec/gcc/x86_64-amazon-linux/11/collect2 -plugin /usr/libexec/gcc/x86_64-amazon-linux/11/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-amazon-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccLzTRE7.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_ad9e1 /usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crti.o /usr/lib/gcc/x86_64-amazon-linux/11/crtbegin.o -L/usr/lib/gcc/x86_64-amazon-linux/11 -L/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-amazon-linux/11/../../.. -v CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-amazon-linux/11/crtend.o /usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crtn.o]
+          arg [/usr/libexec/gcc/x86_64-amazon-linux/11/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/usr/libexec/gcc/x86_64-amazon-linux/11/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/usr/libexec/gcc/x86_64-amazon-linux/11/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccLzTRE7.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--no-add-needed] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [-m] ==> ignore
+          arg [elf_x86_64] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_ad9e1] ==> ignore
+          arg [/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crt1.o] ==> obj [/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crt1.o]
+          arg [/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crti.o] ==> obj [/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crti.o]
+          arg [/usr/lib/gcc/x86_64-amazon-linux/11/crtbegin.o] ==> obj [/usr/lib/gcc/x86_64-amazon-linux/11/crtbegin.o]
+          arg [-L/usr/lib/gcc/x86_64-amazon-linux/11] ==> dir [/usr/lib/gcc/x86_64-amazon-linux/11]
+          arg [-L/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64] ==> dir [/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64]
+          arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+          arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+          arg [-L/usr/lib/gcc/x86_64-amazon-linux/11/../../..] ==> dir [/usr/lib/gcc/x86_64-amazon-linux/11/../../..]
+          arg [-v] ==> ignore
+          arg [CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [-lstdc++] ==> lib [stdc++]
+          arg [-lm] ==> lib [m]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [-lc] ==> lib [c]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [/usr/lib/gcc/x86_64-amazon-linux/11/crtend.o] ==> obj [/usr/lib/gcc/x86_64-amazon-linux/11/crtend.o]
+          arg [/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crtn.o] ==> obj [/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crtn.o]
+        ignore line: [collect2 version 11.5.0 20240719 (Red Hat 11.5.0-5)]
+        ignore line: [/usr/bin/ld -plugin /usr/libexec/gcc/x86_64-amazon-linux/11/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-amazon-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccLzTRE7.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_ad9e1 /usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crti.o /usr/lib/gcc/x86_64-amazon-linux/11/crtbegin.o -L/usr/lib/gcc/x86_64-amazon-linux/11 -L/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-amazon-linux/11/../../.. -v CMakeFiles/cmTC_ad9e1.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-amazon-linux/11/crtend.o /usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crtn.o]
+        linker tool for 'CXX': /usr/bin/ld
+        collapse obj [/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crt1.o] ==> [/usr/lib64/crt1.o]
+        collapse obj [/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crti.o] ==> [/usr/lib64/crti.o]
+        collapse obj [/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64/crtn.o] ==> [/usr/lib64/crtn.o]
+        collapse library dir [/usr/lib/gcc/x86_64-amazon-linux/11] ==> [/usr/lib/gcc/x86_64-amazon-linux/11]
+        collapse library dir [/usr/lib/gcc/x86_64-amazon-linux/11/../../../../lib64] ==> [/usr/lib64]
+        collapse library dir [/lib/../lib64] ==> [/lib64]
+        collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+        collapse library dir [/usr/lib/gcc/x86_64-amazon-linux/11/../../..] ==> [/usr/lib]
+        implicit libs: [stdc++;m;gcc_s;gcc;c;gcc_s;gcc]
+        implicit objs: [/usr/lib64/crt1.o;/usr/lib64/crti.o;/usr/lib/gcc/x86_64-amazon-linux/11/crtbegin.o;/usr/lib/gcc/x86_64-amazon-linux/11/crtend.o;/usr/lib64/crtn.o]
+        implicit dirs: [/usr/lib/gcc/x86_64-amazon-linux/11;/usr/lib64;/lib64;/usr/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/Internal/CMakeDetermineLinkerId.cmake:36 (message)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeDetermineCompilerABI.cmake:299 (cmake_determine_linker_id)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Running the CXX compiler's linker: "/usr/bin/ld" "-v"
+      GNU ld version 2.41-50.amzn2023.0.3
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CheckCXXSourceCompiles.cmake:103 (cmake_check_source_compiles)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/FindThreads.cmake:99 (check_cxx_source_compiles)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/FindThreads.cmake:163 (_threads_check_libc)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake:78 (find_package)"
+      - "/home/ec2-user/miniconda3/lib/cmake/GTest/GTestConfig.cmake:29 (find_dependency)"
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/FindGTest.cmake:337 (find_package)"
+      - "CMakeLists.txt:4 (find_package)"
+    directories:
+      source: "/home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/CMakeScratch/TryCompile-D09paf"
+      binary: "/home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/CMakeScratch/TryCompile-D09paf"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_HAVE_LIBC_PTHREAD"
+      cached: true
+      stdout: |
+        Change Dir: '/home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/CMakeScratch/TryCompile-D09paf'
+        
+        Run Build Command(s): /opt/pytorch/lib/python3.12/site-packages/cmake/data/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_f7ba3/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_f7ba3.dir/build.make CMakeFiles/cmTC_f7ba3.dir/build
+        gmake[1]: Entering directory '/home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/CMakeScratch/TryCompile-D09paf'
+        Building CXX object CMakeFiles/cmTC_f7ba3.dir/src.cxx.o
+        /usr/bin/c++ -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_f7ba3.dir/src.cxx.o -c /home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/CMakeScratch/TryCompile-D09paf/src.cxx
+        Linking CXX executable cmTC_f7ba3
+        /opt/pytorch/lib/python3.12/site-packages/cmake/data/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f7ba3.dir/link.txt --verbose=1
+        /usr/bin/c++ CMakeFiles/cmTC_f7ba3.dir/src.cxx.o -o cmTC_f7ba3
+        gmake[1]: Leaving directory '/home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/CMakeScratch/TryCompile-D09paf'
+        
+      exitCode: 0
+  -
+    kind: "find_package-v1"
+    backtrace:
+      - "/opt/pytorch/lib/python3.12/site-packages/cmake/data/share/cmake-4.1/Modules/FindGTest.cmake:337 (find_package)"
+      - "CMakeLists.txt:4 (find_package)"
+    name: "GTest"
+    configs:
+      -
+        filename: "GTestConfig.cmake"
+        kind: "cmake"
+      -
+        filename: "gtest-config.cmake"
+        kind: "cmake"
+    version_request:
+      exact: false
+    settings:
+      required: "optional"
+      quiet: true
+      global: false
+      policy_scope: true
+      bypass_provider: false
+      names:
+        - "GTest"
+      path_suffixes:
+        - ""
+      paths:
+        CMAKE_FIND_USE_CMAKE_PATH: true
+        CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+        CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+        CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+        CMAKE_FIND_USE_INSTALL_PREFIX: true
+        CMAKE_FIND_USE_PACKAGE_ROOT_PATH: true
+        CMAKE_FIND_USE_CMAKE_PACKAGE_REGISTRY: true
+        CMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY: true
+        CMAKE_FIND_ROOT_PATH_MODE: "BOTH"
+    candidates:
+      -
+        path: "/home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/pkgRedirects/GTestConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/home/ec2-user/Class-Projects/grad/year1sem1/cs521/mp4/CMakeFiles/pkgRedirects/gtest-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/opt/amazon/openmpi/GTestConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/opt/amazon/openmpi/gtest-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/opt/amazon/efa/GTestConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/opt/amazon/efa/gtest-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/opt/pytorch/GTestConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/opt/pytorch/gtest-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/usr/local/cuda/GTestConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/usr/local/cuda/gtest-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/usr/local/cuda/include/GTestConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/usr/local/cuda/include/gtest-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/usr/libexec/gcc/x86_64-amazon-linux/11/GTestConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/usr/libexec/gcc/x86_64-amazon-linux/11/gtest-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/opt/aws/GTestConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/opt/aws/gtest-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/home/ec2-user/miniconda3/GTestConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/home/ec2-user/miniconda3/gtest-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+    found:
+      path: "/home/ec2-user/miniconda3/lib/cmake/GTest/GTestConfig.cmake"
+      mode: "config"
+      version: "1.11.0"
+    search_context:
+      ENV{PATH}:
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/home/ec2-user/miniconda3/bin"
+        - "/home/ec2-user/miniconda3/condabin"
+        - "/home/ec2-user/.local/bin"
+        - "/home/ec2-user/bin"
+        - "/opt/amazon/openmpi/bin"
+        - "/opt/amazon/efa/bin"
+        - "/usr/share/Modules/bin"
+        - "/opt/pytorch/bin"
+        - "/usr/local/cuda/bin"
+        - "/usr/local/cuda/include"
+        - "/usr/libexec/gcc/x86_64-amazon-linux/11"
+        - "/opt/aws/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/usr/local/sbin"
+        - "/usr/sbin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/opt/pytorch/lib/python3.12/site-packages/cmake/data"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+...

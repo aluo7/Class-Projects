@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/Jax4AutomaticDifferentiation.dir/link.d CMakeFiles/Jax4AutomaticDifferentiation.dir/dual_test.cpp.o -o Jax4AutomaticDifferentiation  -Wl,-rpath,/home/ec2-user/miniconda3/lib /home/ec2-user/miniconda3/lib/libgtest_main.so.1.11.0 -lpthread /home/ec2-user/miniconda3/lib/libgtest.so.1.11.0
